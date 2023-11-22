@@ -6,7 +6,7 @@ export async function initToken(
   address: string,
   code: number
 ) {
-  const initial_balances: Cw20Coin[] = [{ address, amount: "123456000000" }];
+  const initial_balances: Cw20Coin[] = [{ address, amount: "1000000000" }];
   const initMsg: InstantiateMsg = {
     name: "Test Token",
     symbol: "TTOKEN",

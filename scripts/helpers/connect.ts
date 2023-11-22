@@ -36,6 +36,8 @@ export async function connect(mnemonic: string, network: Network) {
   console.log(`Balance: ${balance.amount} ${balance.denom}`);
 
   const chainId = await client.getChainId();
+  console.log(chainId);
+  
 
   if (chainId !== network.chainId) {
     throw Error("Given ChainId doesn't match the clients ChainID!");

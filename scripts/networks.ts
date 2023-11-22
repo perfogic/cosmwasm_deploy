@@ -10,11 +10,11 @@ export interface Network {
   faucetUrl: string;
 }
 
-export const malagaConfig: Network = {
-  chainId: "malaga-420",
-  rpcEndpoint: "https://rpc.malaga-420.cosmwasm.com/",
-  prefix: "wasm",
-  gasPrice: GasPrice.fromString("0.25umlg"),
-  feeToken: "umlg",
-  faucetUrl: "https://faucet.malaga-420.cosmwasm.com/",
+export const osmosisConfig: Network = {
+  chainId: "osmo-test-5",
+  rpcEndpoint: "https://rpc.testnet.osmosis.zone",
+  prefix: "osmo",
+  gasPrice: GasPrice.fromString("0.0025uosmo"),
+  feeToken: "uosmo",
+  faucetUrl: "https://faucet.testnet.osmosis.zone/",
 };
