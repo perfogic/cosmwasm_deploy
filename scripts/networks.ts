@@ -18,3 +18,12 @@ export const osmosisConfig: Network = {
   feeToken: "uosmo",
   faucetUrl: "https://faucet.testnet.osmosis.zone/",
 };
+
+export const oraiConfig: Network = {
+  chainId: "Oraichain-testnet",
+  rpcEndpoint: "https://testnet-rpc.orai.io",
+  prefix: "orai",
+  gasPrice: GasPrice.fromString("0.002orai"), 
+  feeToken: "orai",
+  faucetUrl: "https://faucet.orai.io/",
+}

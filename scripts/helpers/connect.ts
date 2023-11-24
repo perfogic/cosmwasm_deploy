@@ -3,14 +3,15 @@ import {
   makeCosmoshubPath,
   SigningCosmWasmClient,
 } from "cosmwasm";
+
 import { Network } from "../networks";
 
 /**
- * 
- * @param mnemonic 
- * @param network 
+ *
+ * @param mnemonic
+ * @param network
  * @returns
- */
+ **/
 export async function connect(mnemonic: string, network: Network) {
   const { prefix, gasPrice, feeToken, rpcEndpoint } = network;
   const hdPath = makeCosmoshubPath(0);
@@ -37,7 +38,6 @@ export async function connect(mnemonic: string, network: Network) {
 
   const chainId = await client.getChainId();
   console.log(chainId);
-  
 
   if (chainId !== network.chainId) {
     throw Error("Given ChainId doesn't match the clients ChainID!");

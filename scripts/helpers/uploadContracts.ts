@@ -1,4 +1,5 @@
-import { SigningCosmWasmClient } from "cosmwasm";
+// import { SigningCosmWasmClient } from "cosmwasm";
+import {SigningCosmWasmClient} from '@cosmjs/cosmwasm-stargate'
 import { Contract, loadContract } from "./utils";
 
 interface UploadResults {
@@ -25,8 +26,8 @@ export async function uploadContracts(
       signer,
       wasm,
       "auto",
-      `Upload ${contract.name}`
     );
+        
     uploaded[contract.name] = receipt.codeId;
   }
   return uploaded;

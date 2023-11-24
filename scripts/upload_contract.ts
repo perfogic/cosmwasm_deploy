@@ -1,14 +1,30 @@
 import { Contract, getMnemonic } from "./helpers/utils";
 import { connect } from "./helpers/connect";
-import { osmosisConfig } from "./networks";
+import { osmosisConfig, oraiConfig } from "./networks";
 import { hitFaucet } from "./helpers/hitFaucet";
 import { uploadContracts } from "./helpers/uploadContracts";
-import { initToken } from "./helpers/initToken";
+import { initDao, initToken } from "./helpers/initContract";
 
 const contracts: Contract[] = [
   {
+    name: "dao_contract",
+    wasmFile: "./contracts/dao-dao-core.wasm",
+  },
+  {
     name: "cw20_base",
-    wasmFile: "./contracts/cw20_base.wasm",
+    wasmFile: "./contracts/cw20-base.wasm",
+  },
+  {
+    name: "staking_contract",
+    wasmFile: "./contracts/cw20-stake.wasm",
+  },
+  {
+    name: "voting_contract",
+    wasmFile: "./contracts/dao-voting-cw20-staked.wasm",
+  },
+  {
+    name: "proposal_contract",
+    wasmFile: "./contracts/dao-proposal-single.wasm",
   },
 ];
 
@@ -33,9 +49,17 @@ async function main(): Promise<void> {
 
   // upload contract
   const codeId = await uploadContracts(client, address, contracts);
+  const contractId = {
+    dao: codeId.dao_contract,
+    cw20Base: codeId.cw20_base,
+    staking: codeId.staking_contract,
+    voting: codeId.voting_contract,
+    proposal: codeId.proposal_contract
+  }
 
   // instantiate contract
-  const contractAddress = await initToken(client, address, codeId.cw20_base);
+  // const contractAddress = await initToken(client, address, codeId.cw20_base);
+  const contractAddress = await initDao(client, address, contractId);
   console.log("Contract address: ", contractAddress);
 }
 
