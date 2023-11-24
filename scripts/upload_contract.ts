@@ -4,6 +4,7 @@ import { osmosisConfig, oraiConfig } from "./networks";
 import { hitFaucet } from "./helpers/hitFaucet";
 import { uploadContracts } from "./helpers/uploadContracts";
 import { initDao, initToken } from "./helpers/initContract";
+import { DaoDaoCoreClient, DaoVotingCw20StakedClient } from "../bindings";
 
 const contracts: Contract[] = [
   {
@@ -29,7 +30,7 @@ const contracts: Contract[] = [
 ];
 
 async function main(): Promise<void> {
-  // get the mnemonic 
+  // get the mnemonic
   const mnemonic = getMnemonic();
 
   // get signing client
@@ -39,13 +40,16 @@ async function main(): Promise<void> {
   let { amount } = await client.getBalance(address, osmosisConfig.feeToken);
 
   // if not enough balance then call faucet
-  if (amount === '0') {
+  if (amount === "0") {
     console.warn("Not enough token. Call faucet!");
     await hitFaucet(address, osmosisConfig.feeToken, osmosisConfig.faucetUrl);
 
     let { amount } = await client.getBalance(address, osmosisConfig.feeToken);
     console.log(`New balance of address ${address}: ${amount}`);
   }
+
+  console.log(DaoVotingCw20StakedClient);
+  
 
   // upload contract
   const codeId = await uploadContracts(client, address, contracts);
@@ -54,13 +58,27 @@ async function main(): Promise<void> {
     cw20Base: codeId.cw20_base,
     staking: codeId.staking_contract,
     voting: codeId.voting_contract,
-    proposal: codeId.proposal_contract
-  }
+    proposal: codeId.proposal_contract,
+  };
 
   // instantiate contract
   // const contractAddress = await initToken(client, address, codeId.cw20_base);
   const contractAddress = await initDao(client, address, contractId);
-  console.log("Contract address: ", contractAddress);
+  console.log("Dao address: ", contractAddress);
+
+  // create dao client
+  const daoContract = new DaoDaoCoreClient(client, address, contractAddress);
+  const votingAddr = await daoContract.votingModule();
+  console.log("Voting address: ", votingAddr);
+  console.log("Proposal address: ", await daoContract.proposalModules({}));
+
+  const votingContract = new DaoVotingCw20StakedClient(
+    client,
+    address,
+    votingAddr
+  );
+  console.log("Cw20 contract: ", await votingContract.tokenContract());
+  console.log("Staking contract: ", await votingContract.stakingContract());
 }
 
 main().then(
