@@ -1,8 +1,6 @@
-import {
-  DirectSecp256k1HdWallet,
-  makeCosmoshubPath,
-  SigningCosmWasmClient,
-} from "cosmwasm";
+import {SigningCosmWasmClient} from '@cosmjs/cosmwasm-stargate'
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import {makeCosmoshubPath} from '@cosmjs/amino'
 
 import { Network } from "../networks";
 
@@ -29,8 +27,7 @@ export async function connect(mnemonic: string, network: Network) {
     rpcEndpoint,
     offlineSigner,
     {
-      prefix,
-      gasPrice,
+      gasPrice, 
     }
   );
   const balance = await client.getBalance(address, feeToken);

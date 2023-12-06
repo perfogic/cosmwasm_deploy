@@ -1,4 +1,4 @@
-import { Contract, getMnemonic } from "./helpers/utils";
+import { Contract, getMnemonic, loadContract } from "./helpers/utils";
 import { connect } from "./helpers/connect";
 import { osmosisConfig, oraiConfig } from "./networks";
 import { hitFaucet } from "./helpers/hitFaucet";
@@ -34,22 +34,19 @@ async function main(): Promise<void> {
   const mnemonic = getMnemonic();
 
   // get signing client
-  const { client, address } = await connect(mnemonic, osmosisConfig);
+  const { client, address } = await connect(mnemonic, oraiConfig);
 
   // check that the given wallet has enough balance
   let { amount } = await client.getBalance(address, osmosisConfig.feeToken);
 
   // if not enough balance then call faucet
-  if (amount === "0") {
-    console.warn("Not enough token. Call faucet!");
-    await hitFaucet(address, osmosisConfig.feeToken, osmosisConfig.faucetUrl);
+  // if (amount === "0") {
+  //   console.warn("Not enough token. Call faucet!");
+  //   await hitFaucet(address, osmosisConfig.feeToken, osmosisConfig.faucetUrl);
 
-    let { amount } = await client.getBalance(address, osmosisConfig.feeToken);
-    console.log(`New balance of address ${address}: ${amount}`);
-  }
-
-  console.log(DaoVotingCw20StakedClient);
-  
+  //   let { amount } = await client.getBalance(address, osmosisConfig.feeToken);
+  //   console.log(`New balance of address ${address}: ${amount}`);
+  // }
 
   // upload contract
   const codeId = await uploadContracts(client, address, contracts);
