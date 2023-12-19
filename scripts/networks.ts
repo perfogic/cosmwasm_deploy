@@ -23,10 +23,10 @@ export const oraiConfig: Network = {
   chainId: "Oraichain",
   rpcEndpoint: "https://rpc.orai.io",
   prefix: "orai",
-  gasPrice: GasPrice.fromString("0.002orai"), 
+  gasPrice: GasPrice.fromString("0.002orai"),
   feeToken: "orai",
   faucetUrl: "https://faucet.orai.io/",
-}
+};
 
 export const junoConfig: Network = {
   chainId: "uni-6",
@@ -35,4 +35,13 @@ export const junoConfig: Network = {
   gasPrice: GasPrice.fromString("0.0025uosmo"),
   feeToken: "uosmo",
   faucetUrl: "https://faucet.testnet.osmosis.zone/",
+};
+
+export const injectiveConfig: Network = {
+  chainId: "injective-888",
+  rpcEndpoint: "https://testnet.sentry.tm.injective.network:443",
+  prefix: "inj",
+  gasPrice: GasPrice.fromString("0.0025INJ"),
+  feeToken: "INJ",
+  faucetUrl: "https://testnet.faucet.injective.network/",
 };

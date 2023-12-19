@@ -1,8 +1,13 @@
-import {SigningCosmWasmClient} from '@cosmjs/cosmwasm-stargate'
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import {makeCosmoshubPath} from '@cosmjs/amino'
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import {
+  DirectSecp256k1HdWallet,
+  OfflineDirectSigner,
+} from "@cosmjs/proto-signing";
+import { makeCosmoshubPath } from "@cosmjs/amino";
 
 import { Network } from "../networks";
+import { DirectEthSecp256k1Wallet } from "@injectivelabs/sdk-ts/dist/cjs/core/accounts/signers/DirectEthSecp256k1Wallet";
+import { PrivateKey } from "@injectivelabs/sdk-ts";
 
 /**
  *
