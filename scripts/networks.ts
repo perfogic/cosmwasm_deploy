@@ -36,12 +36,3 @@ export const junoConfig: Network = {
   feeToken: "uosmo",
   faucetUrl: "https://faucet.testnet.osmosis.zone/",
 };
-
-export const injectiveConfig: Network = {
-  chainId: "injective-888",
-  rpcEndpoint: "https://testnet.sentry.tm.injective.network:443",
-  prefix: "inj",
-  gasPrice: GasPrice.fromString("0.0025INJ"),
-  feeToken: "INJ",
-  faucetUrl: "https://testnet.faucet.injective.network/",
-};

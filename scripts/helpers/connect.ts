@@ -45,8 +45,7 @@ export async function connect(mnemonic: string, network: Network) {
 }
 
 export const connectINJ = async (mnemonic: string) => {
-  const privateKeyHash = PrivateKey.fromMnemonic(mnemonic).toPrivateKeyHex();
-  const privateKey = PrivateKey.fromHex(privateKeyHash);
+  const privateKey = PrivateKey.fromMnemonic(mnemonic);
   const injectiveAddress = privateKey.toBech32();
 
   return {

@@ -1,13 +1,8 @@
 import { Contract, getMnemonic, loadContract } from "./helpers/utils";
 import { connectINJ } from "./helpers/connect";
 import { Cw20Coin, InstantiateMsg } from "../bindings/Cw20.types";
-import {
-  Network,
-  getNetworkInfo,
-  ChainInfo,
-  NetworkEndpoints,
-} from "@injectivelabs/networks";
-import { uploadContractsInj } from "./helpers/uploadContracts";
+import { Network, getNetworkInfo } from "@injectivelabs/networks";
+import { executeTransaction, uploadContractsInj } from "./helpers/contract";
 import { getStdFee } from "@injectivelabs/utils";
 import {
   BaseAccount,
@@ -25,13 +20,11 @@ const contracts: Contract[] = [
 ];
 
 async function main(): Promise<void> {
-  // get the mnemonic
   const mnemonic = getMnemonic();
-
-  // get signing client
   const { privateKey, address } = await connectINJ(mnemonic);
 
   const network = getNetworkInfo(Network.TestnetSentry);
+  console.log(network);
 
   const uploadContracts = await uploadContractsInj(
     privateKey,
@@ -39,13 +32,6 @@ async function main(): Promise<void> {
     network,
     contracts
   );
-
-  const pubKey = privateKey.toPublicKey().toBase64();
-  const chainId = network.chainId;
-
-  const chainRestAuthApi = new ChainRestAuthApi(network.rest);
-  const accountDetailsResponse = await chainRestAuthApi.fetchAccount(address);
-  const baseAccount = BaseAccount.fromRestApi(accountDetailsResponse);
 
   const initial_balances: Cw20Coin[] = [{ address, amount: "1000000000" }];
   const initMsg: InstantiateMsg = {
@@ -66,22 +52,7 @@ async function main(): Promise<void> {
     sender: address,
   });
 
-  /** Prepare the Transaction **/
-  const { txRaw, signBytes } = createTransaction({
-    pubKey,
-    chainId,
-    fee: getStdFee({
-      gas: 5000000,
-    }),
-    message: msg,
-    sequence: baseAccount.sequence,
-    accountNumber: baseAccount.accountNumber,
-  });
-  const signature = await privateKey.sign(Buffer.from(signBytes));
-  txRaw.signatures = [signature];
-  const txService = new TxGrpcClient(network.grpc);
-
-  const txResponse = await txService.broadcast(txRaw);
+  const txResponse = await executeTransaction(privateKey, network, msg);
   console.log(txResponse);
 }
 

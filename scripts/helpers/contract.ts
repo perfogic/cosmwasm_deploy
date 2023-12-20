@@ -8,16 +8,14 @@ import {
   ChainRestAuthApi,
   BaseAccount,
   TxGrpcClient,
+  Msgs,
+  TxResponse,
 } from "@injectivelabs/sdk-ts";
 import { ChainInfo, NetworkEndpoints } from "@injectivelabs/networks";
 import { getStdFee } from "@injectivelabs/utils";
 
 interface UploadResults {
   [name: string]: number;
-}
-
-interface UploadResultsINJ {
-  [name: string]: string;
 }
 
 /**
@@ -43,45 +41,55 @@ export async function uploadContracts(
   return uploaded;
 }
 
+export const executeTransaction = async (
+  privateKey: PrivateKey,
+  network: ChainInfo & NetworkEndpoints,
+  msg: Msgs
+): Promise<TxResponse> => {
+  const pubKey = privateKey.toPublicKey().toBase64();
+  const chainId = network.chainId;
+
+  const chainRestAuthApi = new ChainRestAuthApi(network.rest);
+  const accountDetailsResponse = await chainRestAuthApi.fetchAccount(
+    privateKey.toBech32()
+  );
+  const baseAccount = BaseAccount.fromRestApi(accountDetailsResponse);
+
+  const { txRaw, signBytes } = createTransaction({
+    pubKey,
+    chainId,
+    fee: getStdFee({
+      gas: 5000000,
+    }),
+    message: msg,
+    sequence: baseAccount.sequence,
+    accountNumber: baseAccount.accountNumber,
+  });
+
+  const signature = await privateKey.sign(Buffer.from(signBytes));
+  txRaw.signatures = [signature];
+  const txService = new TxGrpcClient(network.grpc);
+
+  return await txService.broadcast(txRaw);
+};
+
 export async function uploadContractsInj(
   privateKey: PrivateKey,
   signer: string,
   network: ChainInfo & NetworkEndpoints,
   contracts: Contract[]
-): Promise<UploadResultsINJ> {
-  const uploaded: UploadResultsINJ = {};
+): Promise<UploadResults> {
+  const uploaded: UploadResults = {};
   for (const contract of contracts) {
     const wasm = await loadContract(contract);
     console.debug(`Uploading ${contract.name}...`);
-
-    const pubKey = privateKey.toPublicKey().toBase64();
-    const chainId = network.chainId;
-
-    const chainRestAuthApi = new ChainRestAuthApi(network.rest);
-    const accountDetailsResponse = await chainRestAuthApi.fetchAccount(signer);
-    const baseAccount = BaseAccount.fromRestApi(accountDetailsResponse);
 
     const msg = MsgStoreCode.fromJSON({
       sender: signer,
       wasmBytes: wasm,
     });
 
-    /** Prepare the Transaction **/
-    const { txRaw, signBytes } = createTransaction({
-      pubKey,
-      chainId,
-      fee: getStdFee({
-        gas: 10000000,
-      }),
-      message: msg,
-      sequence: baseAccount.sequence,
-      accountNumber: baseAccount.accountNumber,
-    });
-    const signature = await privateKey.sign(Buffer.from(signBytes));
-    txRaw.signatures = [signature];
-    const txService = new TxGrpcClient(network.grpc);
-
-    const txResponse = await txService.broadcast(txRaw);
+    const txResponse = await executeTransaction(privateKey, network, msg);
 
     const codeId = JSON.parse(txResponse.rawLog)[0]
       .events.filter(
@@ -90,7 +98,7 @@ export async function uploadContractsInj(
       .attributes.filter((attribute: any) => attribute.key == "code_id")[0]
       .value as string;
 
-    uploaded[contract.name] = codeId;
+    uploaded[contract.name] = parseInt(codeId.split('"')[1]);
   }
   return uploaded;
 }
