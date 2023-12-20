@@ -64,9 +64,11 @@ async function main(): Promise<void> {
     },
   });
 
-  await executeTransaction(privateKey, network, createDenomMsg);
-  await executeTransaction(privateKey, network, setDenomMetadataMsg);
-  await executeTransaction(privateKey, network, mintTokenMsg);
+  await executeTransaction(privateKey, network, [
+    createDenomMsg,
+    setDenomMetadataMsg,
+    mintTokenMsg,
+  ]);
 }
 
 main().then(

@@ -44,7 +44,7 @@ export async function uploadContracts(
 export const executeTransaction = async (
   privateKey: PrivateKey,
   network: ChainInfo & NetworkEndpoints,
-  msg: Msgs
+  msg: Msgs | Msgs[]
 ): Promise<TxResponse> => {
   const pubKey = privateKey.toPublicKey().toBase64();
   const chainId = network.chainId;
