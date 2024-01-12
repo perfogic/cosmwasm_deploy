@@ -10,7 +10,7 @@ export interface Network {
   faucetUrl: string;
 }
 
-export const osmosisConfig: Network = {
+export const OsmosisConfig: Network = {
   chainId: "osmo-test-5",
   rpcEndpoint: "https://rpc.testnet.osmosis.zone",
   prefix: "osmo",
@@ -19,7 +19,7 @@ export const osmosisConfig: Network = {
   faucetUrl: "https://faucet.testnet.osmosis.zone/",
 };
 
-export const oraiConfig: Network = {
+export const OraiConfig: Network = {
   chainId: "Oraichain",
   rpcEndpoint: "https://rpc.orai.io",
   prefix: "orai",
@@ -28,7 +28,7 @@ export const oraiConfig: Network = {
   faucetUrl: "https://faucet.orai.io/",
 };
 
-export const junoConfig: Network = {
+export const JunoConfig: Network = {
   chainId: "uni-6",
   rpcEndpoint: "https://rpc.testnet.osmosis.zone",
   prefix: "osmo",
@@ -36,3 +36,21 @@ export const junoConfig: Network = {
   feeToken: "uosmo",
   faucetUrl: "https://faucet.testnet.osmosis.zone/",
 };
+
+export const OraiBtcSubnetConfig: Network = {
+  chainId: "oraibtc-subnet-1",
+  rpcEndpoint: "http://34.171.228.87:26657",
+  prefix: "oraibtc",
+  gasPrice: GasPrice.fromString("0.0025uoraibtc"),
+  feeToken: "uoraibtc",
+  faucetUrl: "",
+};
+
+export const OraiBtcMainnetConfig: Network = {
+  chainId: "oraibtc-mainnet-1",
+  rpcEndpoint: "https://btc.rpc.orai.io",
+  prefix: "oraibtc",
+  gasPrice: GasPrice.fromString("0uoraibtc"),
+  feeToken: "uoraibtc",
+  faucetUrl: "",
+}

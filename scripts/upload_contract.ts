@@ -2,7 +2,7 @@ import { Contract, getMnemonic, loadContract } from "./helpers/utils";
 import { connect } from "./helpers/connect";
 import { uploadContracts } from "./helpers/contract";
 import { Cw20Coin, InstantiateMsg } from "../bindings/Cw20.types";
-import { junoConfig } from "./networks";
+import { JunoConfig } from "./networks";
 
 const contracts: Contract[] = [
   {
@@ -16,7 +16,7 @@ async function main(): Promise<void> {
   const mnemonic = getMnemonic();
 
   // get signing client
-  const { client, address } = await connect(mnemonic, junoConfig);
+  const { client, address } = await connect(mnemonic, JunoConfig);
 
   // upload contract
   const codeId = await uploadContracts(client, address, contracts);
