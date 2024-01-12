@@ -1,5 +1,2 @@
-# academy-deploy
-
-This repository contains the companion material to Chapter 3 from the CosmWasm Academy course "Frontend".
-
-Check out academy.cosmwasm.com !
+## Note:
+- This repo is forked from https://github.com/ledanghuy1811/cosmwasm-deploy for further testing on Cosmos.
