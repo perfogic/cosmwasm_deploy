@@ -1,9 +1,11 @@
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { SigningCosmWasmClient, createWasmAminoConverters } from "@cosmjs/cosmwasm-stargate";
+import { createDefaultAminoConverters } from "@cosmjs/stargate";
 import { DirectSecp256k1HdWallet, isOfflineDirectSigner } from "@cosmjs/proto-signing";
 import { Secp256k1HdWallet, makeCosmoshubPath } from "@cosmjs/amino";
 
 import { Network } from "../networks";
 import { PrivateKey } from "@injectivelabs/sdk-ts";
+import { AminoTypes } from "@cosmjs/stargate";
 
 /**
  *
@@ -36,12 +38,29 @@ export async function connect(mnemonic: string, network: Network, offline: boole
     address = addr;
   }
 
+  const customAminoConverter = {
+    "nomic/MsgSetRecoveryAddress": {
+        aminoType: "nomic/MsgSetRecoveryAddress",
+        toAmino: ({ recovery_address }: any) => ({
+            recovery_address: recovery_address
+        }),
+        fromAmino: ({ recovery_address }: any) => ({
+            recovery_address: recovery_address
+        }),
+    }
+  }
+  
   // Init SigningCosmWasmClient client
   const client = await SigningCosmWasmClient.connectWithSigner(
     rpcEndpoint,
     signer,
     {
       gasPrice,
+      aminoTypes: new AminoTypes({
+        ...createDefaultAminoConverters(),
+        ...createWasmAminoConverters(),
+        ...customAminoConverter
+      })
     }
   );
 
