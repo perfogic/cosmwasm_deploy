@@ -10,7 +10,7 @@ async function main(): Promise<void> {
     // get the mnemonic
     const mnemonic = getMnemonic();
 
-    const { client, address } = await connect(mnemonic, OraiBtcLocalConfig, false);
+    const { client, address } = await connect(mnemonic, OraiBtcLocalConfig, true);
 
     const setRecoveryAddressMsg = {
         typeUrl: "nomic/MsgSetRecoveryAddress",
@@ -25,7 +25,6 @@ async function main(): Promise<void> {
     ).finish()
     console.log("Decode:", MsgSetRecoveryAddressOriginal.decode(bytes))
     client.registry.register(setRecoveryAddressMsg.typeUrl, MsgSetRecoveryAddressOriginal)
-
 
     const txRaw = await client.sign(
         address,

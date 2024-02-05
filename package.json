@@ -9,10 +9,12 @@
     "lint": "eslint --max-warnings 0 \"./src/**/*.ts\" \"./scripts/**/*.ts\""
   },
   "dependencies": {
-    "@cosmjs/amino": "^0.32.1",
+    "@cosmjs/amino": "0.32.1",
     "@cosmjs/cosmwasm-stargate": "^0.32.1",
+    "@cosmjs/encoding": "^0.32.2",
     "@cosmjs/proto-signing": "^0.32.1",
     "@cosmjs/stargate": "^0.32.1",
+    "@cosmjs/tendermint-rpc": "^0.32.2",
     "@injectivelabs/sdk-ts": "^1.14.4",
     "@oraichain/dao-contracts-build": "^1.0.5",
     "@oraichain/oraibtc-wasm": "^1.0.11",

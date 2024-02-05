@@ -64,7 +64,7 @@ export async function connect(mnemonic: string, network: Network, offline: boole
     }
   );
 
-  return { client, address };
+  return { client, address, signer };
 }
 
 export const connectINJ = async (mnemonic: string) => {
