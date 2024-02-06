@@ -37,7 +37,7 @@ async function main(): Promise<void> {
         {
           accountNumber: 0,
           chainId: OraiBtcLocalConfig.chainId,
-          sequence: 10
+          sequence: 4
         }
       );
 
