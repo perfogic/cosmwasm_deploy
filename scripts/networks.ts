@@ -19,7 +19,7 @@ export const OsmosisConfig: Network = {
   faucetUrl: "https://faucet.testnet.osmosis.zone/",
 };
 
-export const OraiConfig: Network = {
+export const OraichainConfig: Network = {
   chainId: "Oraichain",
   rpcEndpoint: "https://rpc.orai.io",
   prefix: "orai",
