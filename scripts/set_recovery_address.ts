@@ -1,6 +1,6 @@
 import { getMnemonic } from "./helpers/utils";
 import { connect } from "./helpers/connect";
-import { OraiBtcLocalConfig } from "./networks";
+import { OraiBtcMainnetConfig } from "./networks";
 import { coin, StdFee } from "@cosmjs/amino";
 // import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
@@ -10,12 +10,12 @@ async function main(): Promise<void> {
     // get the mnemonic
     const mnemonic = getMnemonic();
 
-    const { client, address } = await connect(mnemonic, OraiBtcLocalConfig, true);
+    const { client, address } = await connect(mnemonic, OraiBtcMainnetConfig, true);
 
     const setRecoveryAddressMsg = {
         typeUrl: "nomic/MsgSetRecoveryAddress",
         value: {
-            recovery_address: "tb1qc6pw50rgq43vcznfzy5rgykgcdd9nkf26gk477",
+            recovery_address: "bc1qc6pw50rgq43vcznfzy5rgykgcdd9nkf2swdx9d",
         },
     };
 
@@ -30,13 +30,13 @@ async function main(): Promise<void> {
         address,
         [setRecoveryAddressMsg],
         {
-          amount: [coin("0", OraiBtcLocalConfig.feeToken)],
+          amount: [coin("0", OraiBtcMainnetConfig.feeToken)],
           gas: "0",
         } as StdFee,
         "",
         {
           accountNumber: 0,
-          chainId: OraiBtcLocalConfig.chainId,
+          chainId: OraiBtcMainnetConfig.chainId,
           sequence: 4
         }
       );
