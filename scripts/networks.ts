@@ -53,10 +53,10 @@ export const OraiBtcMainnetConfig: Network = {
   gasPrice: GasPrice.fromString("0uoraibtc"),
   feeToken: "uoraibtc",
   faucetUrl: "",
-}
+};
 
 export const OraiBtcLocalConfig: Network = {
-  chainId: "oraibtc-testnet-1",
+  chainId: "oraibtc-testnet-0",
   rpcEndpoint: "http://127.0.0.1:26657",
   prefix: "oraibtc",
   gasPrice: GasPrice.fromString("0uoraibtc"),

@@ -1,6 +1,12 @@
-import { SigningCosmWasmClient, createWasmAminoConverters } from "@cosmjs/cosmwasm-stargate";
+import {
+  SigningCosmWasmClient,
+  createWasmAminoConverters,
+} from "@cosmjs/cosmwasm-stargate";
 import { createDefaultAminoConverters } from "@cosmjs/stargate";
-import { DirectSecp256k1HdWallet, isOfflineDirectSigner } from "@cosmjs/proto-signing";
+import {
+  DirectSecp256k1HdWallet,
+  isOfflineDirectSigner,
+} from "@cosmjs/proto-signing";
 import { Secp256k1HdWallet, makeCosmoshubPath } from "@cosmjs/amino";
 
 import { Network } from "../networks";
@@ -13,7 +19,11 @@ import { AminoTypes } from "@cosmjs/stargate";
  * @param network
  * @returns
  **/
-export async function connect(mnemonic: string, network: Network, offline: boolean = true) {
+export async function connect(
+  mnemonic: string,
+  network: Network,
+  offline: boolean = true
+) {
   const { prefix, gasPrice, feeToken, rpcEndpoint } = network;
   const hdPath = makeCosmoshubPath(0);
 
@@ -30,9 +40,8 @@ export async function connect(mnemonic: string, network: Network, offline: boole
     const { address: addr } = (await offlineSigner.getAccounts())[0];
     signer = offlineSigner;
     address = addr;
-  }
-  else {
-    const onlineSigner = await Secp256k1HdWallet.fromMnemonic(mnemonic)
+  } else {
+    const onlineSigner = await Secp256k1HdWallet.fromMnemonic(mnemonic);
     const { address: addr } = (await onlineSigner.getAccounts())[0];
     signer = onlineSigner;
     address = addr;
@@ -40,16 +49,24 @@ export async function connect(mnemonic: string, network: Network, offline: boole
 
   const customAminoConverter = {
     "nomic/MsgSetRecoveryAddress": {
-        aminoType: "nomic/MsgSetRecoveryAddress",
-        toAmino: ({ recovery_address }: any) => ({
-            recovery_address: recovery_address
-        }),
-        fromAmino: ({ recovery_address }: any) => ({
-            recovery_address: recovery_address
-        }),
-    }
-  }
-  
+      aminoType: "nomic/MsgSetRecoveryAddress",
+      toAmino: ({ recovery_address }: any) => ({
+        recovery_address: recovery_address,
+      }),
+      fromAmino: ({ recovery_address }: any) => ({
+        recovery_address: recovery_address,
+      }),
+    },
+  };
+
+  const customAminoConverter1 = {
+    "nomic/MsgClaimIbcBitcoin": {
+      aminoType: "nomic/MsgClaimIbcBitcoin",
+      toAmino: ({}) => ({}),
+      fromAmino: ({}) => ({}),
+    },
+  };
+
   // Init SigningCosmWasmClient client
   const client = await SigningCosmWasmClient.connectWithSigner(
     rpcEndpoint,
@@ -59,8 +76,9 @@ export async function connect(mnemonic: string, network: Network, offline: boole
       aminoTypes: new AminoTypes({
         ...createDefaultAminoConverters(),
         ...createWasmAminoConverters(),
-        ...customAminoConverter
-      })
+        ...customAminoConverter1,
+        ...customAminoConverter,
+      }),
     }
   );
 

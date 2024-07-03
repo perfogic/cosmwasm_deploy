@@ -6,7 +6,8 @@
   "scripts": {
     "upload_contract": "ts-node ./scripts/upload_contract.ts",
     "fix": "eslint --fix \"./src/**/*.ts\" \"./scripts/*/*.ts\"",
-    "lint": "eslint --max-warnings 0 \"./src/**/*.ts\" \"./scripts/**/*.ts\""
+    "lint": "eslint --max-warnings 0 \"./src/**/*.ts\" \"./scripts/**/*.ts\"",
+    "build": "node esbuild.config.js"
   },
   "dependencies": {
     "@cosmjs/amino": "0.32.1",
@@ -23,6 +24,7 @@
     "axios": "^0.26.1",
     "cosmjs-types": "^0.9.0",
     "dotenv": "^16.0.3",
+    "esbuild": "^0.23.0",
     "merkletreejs": "^0.2.31",
     "protobufjs": "^7.2.5",
     "ts-node": "^10.7.0",
