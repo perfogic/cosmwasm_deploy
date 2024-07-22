@@ -41,7 +41,9 @@ export async function connect(
     signer = offlineSigner;
     address = addr;
   } else {
-    const onlineSigner = await Secp256k1HdWallet.fromMnemonic(mnemonic);
+    const onlineSigner = await Secp256k1HdWallet.fromMnemonic(mnemonic, {
+      prefix,
+    });
     const { address: addr } = (await onlineSigner.getAccounts())[0];
     signer = onlineSigner;
     address = addr;

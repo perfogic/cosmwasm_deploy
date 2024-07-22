@@ -63,3 +63,12 @@ export const OraiBtcLocalConfig: Network = {
   feeToken: "uoraibtc",
   faucetUrl: "",
 };
+
+export const WasmLocalConfig: Network = {
+  chainId: "testing",
+  rpcEndpoint: "http://127.0.0.1:26657",
+  prefix: "orai",
+  gasPrice: GasPrice.fromString("0.002orai"),
+  feeToken: "orai",
+  faucetUrl: "",
+};

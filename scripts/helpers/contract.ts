@@ -13,6 +13,7 @@ import {
 } from "@injectivelabs/sdk-ts";
 import { ChainInfo, NetworkEndpoints } from "@injectivelabs/networks";
 import { getStdFee } from "@injectivelabs/utils";
+import { Coin } from "cosmjs-types/cosmos/base/v1beta1/coin";
 
 interface UploadResults {
   [name: string]: number;
@@ -37,6 +38,7 @@ export async function uploadContracts(
     const receipt = await client.upload(signer, wasm, "auto");
 
     uploaded[contract.name] = receipt.codeId;
+    console.log(`Uploaded ${contract.name} with code id ${receipt.codeId}`);
   }
   return uploaded;
 }

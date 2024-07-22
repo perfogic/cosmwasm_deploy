@@ -4,6 +4,7 @@ import { OraiBtcMainnetConfig, OraiBtcSubnetConfig } from "./networks";
 import { coin, StdFee } from "@cosmjs/amino";
 // import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import axios from "axios";
 
 async function main(): Promise<void> {
   // get the mnemonic
@@ -11,19 +12,27 @@ async function main(): Promise<void> {
 
   const { client, address } = await connect(
     mnemonic,
-    OraiBtcSubnetConfig,
+    OraiBtcMainnetConfig,
     false
   );
+
+  const res = await fetch(
+    `https://btc.lcd.orai.io/auth/accounts/${address}`
+  ).then((res) => res.json());
+  const sequence = res.result.value.sequence;
 
   const sendMsg1 = {
     typeUrl: "/cosmos.bank.v1beta1.MsgSend",
     value: {
       fromAddress: address,
-      toAddress: "oraibtc1rchnkdpsxzhquu63y6r4j4t57pnc9w8ea88hue",
+      toAddress: process.env.ORAIBTC_RECEIVER_ADDRESS,
       amount: [
         {
-          denom: OraiBtcSubnetConfig.feeToken,
-          amount: "350000000",
+          denom: OraiBtcMainnetConfig.feeToken,
+          amount: (
+            parseInt(process.env.ORAIBTC_AMOUNT || "0") *
+            10 ** 6
+          ).toString(),
         },
       ],
     },
@@ -33,14 +42,14 @@ async function main(): Promise<void> {
     address,
     [sendMsg1],
     {
-      amount: [coin("0", OraiBtcSubnetConfig.feeToken)],
-      gas: "0",
+      amount: [coin("0", OraiBtcMainnetConfig.feeToken)],
+      gas: "20000000",
     } as StdFee,
     "",
     {
       accountNumber: 0,
-      chainId: OraiBtcSubnetConfig.chainId,
-      sequence: 14,
+      chainId: OraiBtcMainnetConfig.chainId,
+      sequence: sequence,
     }
   );
   const txBytes = TxRaw.encode(txRaw).finish();

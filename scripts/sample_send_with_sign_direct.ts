@@ -12,6 +12,7 @@ async function main(): Promise<void> {
 
   const { client, address } = await connect(mnemonic, OraiBtcMainnetConfig);
 
+  console.log(address);
   const res = await axios.get(
     `https://btc.lcd.orai.io/auth/accounts/${address}`
   );
