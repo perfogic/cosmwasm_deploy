@@ -4,7 +4,6 @@ import { uploadContracts } from "./helpers/contract";
 import { InstantiateMsg } from "../bindings/TonbridgeBridge.types";
 import { OraichainConfig, WasmLocalConfig } from "./networks";
 import { Cw20Coin } from "../bindings/Cw20.types";
-import { toAssetInfo } from "@oraichain/oraidex-common";
 import { TokenfactoryClient, TonbridgeBridgeClient } from "../bindings";
 import { coin } from "@cosmjs/stargate";
 
@@ -34,21 +33,38 @@ async function main(): Promise<void> {
   const mnemonic = getMnemonic();
 
   // get signing client
-  const { client, address } = await connect(mnemonic, WasmLocalConfig);
+  const { client, address } = await connect(mnemonic, OraichainConfig);
   console.log(address);
   console.log(await client.getBalance(address, "orai"));
 
-  const contract = new TonbridgeBridgeClient(
-    client,
+  // factory/orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9/ton
+  const tx = await client.sendTokens(
     address,
-    "orai1pvrwmjuusn9wh34j7y520g8gumuy9xtl3gvprlljfdpwju3x7ucsm9nesp"
+    "orai1hvr9d72r5um9lvt0rpkd4r75vrsqtw6yujhqs2",
+    [
+      {
+        amount: "100000",
+        denom:
+          "factory/orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9/ton",
+      },
+    ],
+    "auto",
+    "Bắn tí tiền cho anh Toản"
   );
+  console.log(tx.transactionHash);
 
-  const tokenFactory = new TokenfactoryClient(
-    client,
-    address,
-    "orai1eyfccmjm6732k7wp4p6gdjwhxjwsvje44j0hfx8nkgrm8fs7vqfswre2gu"
-  );
+  // const contract = new TonbridgeBridgeClient(
+  //   client,
+  //   address,
+  //   "orai1f8yer2astssamnyzzp6yvk6q5h49kzj2gu0n7rct8uj38pswy7lqwa8mdw"
+  // );
+
+  // const tokenFactory = new TokenfactoryClient(
+  //   client,
+  //   address,
+  //   "orai1eyfccmjm6732k7wp4p6gdjwhxjwsvje44j0hfx8nkgrm8fs7vqfswre2gu"
+  // );
+  // console.log(await contract.ackCommitment({ seq: 9 }));
 
   // const tx = await tokenFactory.createDenom(
   //   {
@@ -63,7 +79,7 @@ async function main(): Promise<void> {
   // );
   // console.log(tx.transactionHash);
 
-  console.log(await tokenFactory.denomsByCreator({ creator: address }));
+  // console.log(await tokenFactory.denomsByCreator({ creator: address }));
   // const data = await contract.registerDenom(
   //   {
   //     subdenom: "ton",
