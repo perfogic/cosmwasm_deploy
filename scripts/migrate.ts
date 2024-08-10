@@ -18,10 +18,10 @@ const contracts: Contract[] = [
     name: "cw_bitcoin",
     wasmFile: "./contracts/cw-bitcoin.wasm",
   },
-  {
-    name: "token_factory",
-    wasmFile: "./contracts/tokenfactory.wasm",
-  },
+  // {
+  //   name: "token_factory",
+  //   wasmFile: "./contracts/tokenfactory.wasm",
+  // },
 ];
 
 // token factory: orai1q62nnhyzv62re8rs85k666whax0eg0y5m224uwsmsvqnykxwtwwsqnjwcd
@@ -36,42 +36,17 @@ async function main(): Promise<void> {
   // upload contract
   const codeId = await uploadContracts(client, address, contracts);
   const contractId = {
-    tokenFactory: codeId.token_factory,
     cwBitcoin: codeId.cw_bitcoin,
   };
 
-  const info0 = await client.instantiate(
+  const tx = await client.migrate(
     address,
-    contractId.tokenFactory,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    {},
-    "token factory test",
-    "auto",
-    {
-      admin: address,
-    }
-  );
-  console.log(info0.contractAddress);
-
-  const initMsg: InstantiateMsg = {
-    token_factory_addr: info0.contractAddress,
-  };
-
-  const info = await client.instantiate(
-    address,
+    "orai1ul4msjc3mmaxsscdgdtjds85rg50qrepvrczp0ldgma5mm9xv8yq2jk7q5",
     contractId.cwBitcoin,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    initMsg,
-    "cw bitcoin test",
-    "auto",
-    {
-      admin: address,
-    }
+    {},
+    "auto"
   );
-
-  console.log(info.contractAddress);
+  console.log(tx.transactionHash);
 }
 
 main().then(

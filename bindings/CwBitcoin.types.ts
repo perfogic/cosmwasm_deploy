@@ -1,5 +1,6 @@
 export type Addr = string;
 export interface InstantiateMsg {
+  bridge_wasm_addr?: Addr | null;
   token_factory_addr: Addr;
 }
 export type ExecuteMsg = {
@@ -27,6 +28,42 @@ export type ExecuteMsg = {
     dest: Dest;
     sigset_index: number;
   };
+} | {
+  relay_checkpoint: {
+    btc_height: number;
+    btc_proof: Binary;
+    cp_index: number;
+  };
+} | {
+  withdraw_to_bitcoin: {
+    script_pubkey: Binary;
+  };
+} | {
+  submit_checkpoint_signature: {
+    btc_height: number;
+    checkpoint_index: number;
+    sigs: Signature[];
+    xpub: HexBinary;
+  };
+} | {
+  submit_recovery_signature: {
+    sigs: Signature[];
+    xpub: HexBinary;
+  };
+} | {
+  set_signatory_key: {
+    xpub: HexBinary;
+  };
+} | {
+  add_validators: {
+    addrs: string[];
+    infos: [number, [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number]][];
+  };
+} | {
+  register_denom: {
+    metadata?: Metadata | null;
+    subdenom: string;
+  };
 };
 export type Binary = string;
 export type Dest = {
@@ -34,11 +71,10 @@ export type Dest = {
 } | {
   ibc: IbcDest;
 };
+export type Signature = number[];
+export type HexBinary = string;
 export interface BitcoinConfig {
   capacity_limit: number;
-  emergency_disbursal_lock_time_interval: number;
-  emergency_disbursal_max_tx_size: number;
-  emergency_disbursal_min_tx_amt: number;
   fee_pool_reward_split: [number, number];
   fee_pool_target_balance: number;
   max_deposit_age: number;
@@ -54,9 +90,6 @@ export interface BitcoinConfig {
   units_per_sat: number;
 }
 export interface CheckpointConfig {
-  emergency_disbursal_lock_time_interval: number;
-  emergency_disbursal_max_tx_size: number;
-  emergency_disbursal_min_tx_amt: number;
   fee_rate: number;
   max_age: number;
   max_checkpoint_interval: number;
@@ -88,9 +121,24 @@ export interface WrappedHeader {
 }
 export interface IbcDest {
   memo: string;
+  receiver: string;
+  sender: string;
   source_channel: string;
   source_port: string;
   timeout_timestamp: number;
+}
+export interface Metadata {
+  base?: string | null;
+  denom_units: DenomUnit[];
+  description?: string | null;
+  display?: string | null;
+  name?: string | null;
+  symbol?: string | null;
+}
+export interface DenomUnit {
+  aliases: string[];
+  denom: string;
+  exponent: number;
 }
 export type QueryMsg = {
   header_height: {};
@@ -98,6 +146,12 @@ export type QueryMsg = {
   deposit_fees: {
     index?: number | null;
   };
+} | {
+  completed_checkpoint_txs: {
+    limit: number;
+  };
+} | {
+  signed_recovery_txs: {};
 } | {
   withdrawal_fees: {
     address: string;
@@ -109,8 +163,26 @@ export type QueryMsg = {
   checkpoint_by_index: {
     index: number;
   };
+} | {
+  signing_recovery_txs: {
+    xpub: HexBinary;
+  };
+} | {
+  signing_txs_at_checkpoint_index: {
+    checkpoint_index: number;
+    xpub: HexBinary;
+  };
+} | {
+  confirmed_index: {};
+} | {
+  building_index: {};
+} | {
+  completed_index: {};
+} | {
+  unhandled_confirmed_index: {};
 };
 export interface MigrateMsg {}
-export type Uint64 = number;
 export type Uint32 = number;
-export type HexBinary = string;
+export type Uint64 = number;
+export type ArrayOfBinary = Binary[];
+export type ArrayOfTupleOfArraySize_32OfUint8AndUint32 = [[number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number], number][];
