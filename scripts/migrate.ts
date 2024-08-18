@@ -41,7 +41,7 @@ async function main(): Promise<void> {
 
   const tx = await client.migrate(
     address,
-    "orai1zrkla3nzvenamj4vp95yxtw6cfxymxkgwqk79z997hqaeq8yg8wsqpatqc",
+    "orai12q6jynhpp27yzny0dyzfvaj2qwee0ysh20fqlslgfej8axu4k50qnp7qqu",
     contractId.cwBitcoin,
     {},
     "auto"

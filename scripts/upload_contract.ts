@@ -56,6 +56,14 @@ async function main(): Promise<void> {
 
   const initMsg: InstantiateMsg = {
     token_factory_addr: info0.contractAddress,
+    relayer_fee: "0",
+    relayer_fee_receiver: "orai1rchnkdpsxzhquu63y6r4j4t57pnc9w8ehdhedx",
+    relayer_fee_token: {
+      native_token: {
+        denom: "orai",
+      },
+    },
+    token_fee_receiver: "orai1rchnkdpsxzhquu63y6r4j4t57pnc9w8ehdhedx",
   };
 
   const info = await client.instantiate(

@@ -1,78 +1,168 @@
+export type Uint128 = string;
 export type Addr = string;
+export type AssetInfo =
+  | {
+      token: {
+        contract_addr: Addr;
+      };
+    }
+  | {
+      native_token: {
+        denom: string;
+      };
+    };
 export interface InstantiateMsg {
-  bridge_wasm_addr?: Addr | null;
+  relayer_fee: Uint128;
+  relayer_fee_receiver: Addr;
+  relayer_fee_token: AssetInfo;
+  swap_router_contract?: Addr | null;
   token_factory_addr: Addr;
+  token_fee_receiver: Addr;
 }
-export type ExecuteMsg = {
-  update_bitcoin_config: {
-    config: BitcoinConfig;
-  };
-} | {
-  update_checkpoint_config: {
-    config: CheckpointConfig;
-  };
-} | {
-  update_header_config: {
-    config: HeaderConfig;
-  };
-} | {
-  relay_headers: {
-    headers: WrappedHeader[];
-  };
-} | {
-  relay_deposit: {
-    btc_height: number;
-    btc_proof: Binary;
-    btc_tx: Binary;
-    btc_vout: number;
-    dest: Dest;
-    sigset_index: number;
-  };
-} | {
-  relay_checkpoint: {
-    btc_height: number;
-    btc_proof: Binary;
-    cp_index: number;
-  };
-} | {
-  withdraw_to_bitcoin: {
-    script_pubkey: Binary;
-  };
-} | {
-  submit_checkpoint_signature: {
-    btc_height: number;
-    checkpoint_index: number;
-    sigs: Signature[];
-    xpub: HexBinary;
-  };
-} | {
-  submit_recovery_signature: {
-    sigs: Signature[];
-    xpub: HexBinary;
-  };
-} | {
-  set_signatory_key: {
-    xpub: HexBinary;
-  };
-} | {
-  add_validators: {
-    addrs: string[];
-    infos: [number, [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number]][];
-  };
-} | {
-  register_denom: {
-    metadata?: Metadata | null;
-    subdenom: string;
-  };
-};
+export type ExecuteMsg =
+  | {
+      update_config: {
+        owner?: Addr | null;
+        relayer_fee?: Uint128 | null;
+        relayer_fee_receiver?: Addr | null;
+        relayer_fee_token?: AssetInfo | null;
+        swap_router_contract?: Addr | null;
+        token_factory_addr?: Addr | null;
+        token_fee?: Ratio | null;
+        token_fee_receiver?: Addr | null;
+      };
+    }
+  | {
+      update_bitcoin_config: {
+        config: BitcoinConfig;
+      };
+    }
+  | {
+      update_checkpoint_config: {
+        config: CheckpointConfig;
+      };
+    }
+  | {
+      update_header_config: {
+        config: HeaderConfig;
+      };
+    }
+  | {
+      relay_headers: {
+        headers: WrappedHeader[];
+      };
+    }
+  | {
+      relay_deposit: {
+        btc_height: number;
+        btc_proof: Binary;
+        btc_tx: Binary;
+        btc_vout: number;
+        dest: Dest;
+        sigset_index: number;
+      };
+    }
+  | {
+      relay_checkpoint: {
+        btc_height: number;
+        btc_proof: Binary;
+        cp_index: number;
+      };
+    }
+  | {
+      withdraw_to_bitcoin: {
+        script_pubkey: Binary;
+      };
+    }
+  | {
+      submit_checkpoint_signature: {
+        btc_height: number;
+        checkpoint_index: number;
+        sigs: Signature[];
+        xpub: String;
+      };
+    }
+  | {
+      submit_recovery_signature: {
+        sigs: Signature[];
+        xpub: String;
+      };
+    }
+  | {
+      set_signatory_key: {
+        xpub: String;
+      };
+    }
+  | {
+      add_validators: {
+        addrs: string[];
+        consensus_keys: [
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number,
+          number
+        ][];
+        voting_powers: number[];
+      };
+    }
+  | {
+      register_denom: {
+        metadata?: Metadata | null;
+        subdenom: string;
+      };
+    }
+  | {
+      change_btc_admin: {
+        new_admin: string;
+      };
+    }
+  | {
+      trigger_begin_block: {
+        hash: Binary;
+      };
+    };
 export type Binary = string;
-export type Dest = {
-  address: Addr;
-} | {
-  ibc: IbcDest;
-};
+export type Dest =
+  | {
+      address: Addr;
+    }
+  | {
+      ibc: IbcDest;
+    };
 export type Signature = number[];
-export type HexBinary = string;
+export type String = string;
+export interface Ratio {
+  denominator: number;
+  nominator: number;
+}
 export interface BitcoinConfig {
   capacity_limit: number;
   fee_pool_reward_split: [number, number];
@@ -140,49 +230,235 @@ export interface DenomUnit {
   denom: string;
   exponent: number;
 }
-export type QueryMsg = {
-  header_height: {};
-} | {
-  deposit_fees: {
-    index?: number | null;
-  };
-} | {
-  completed_checkpoint_txs: {
-    limit: number;
-  };
-} | {
-  signed_recovery_txs: {};
-} | {
-  withdrawal_fees: {
-    address: string;
-    index?: number | null;
-  };
-} | {
-  sidechain_block_hash: {};
-} | {
-  checkpoint_by_index: {
-    index: number;
-  };
-} | {
-  signing_recovery_txs: {
-    xpub: HexBinary;
-  };
-} | {
-  signing_txs_at_checkpoint_index: {
-    checkpoint_index: number;
-    xpub: HexBinary;
-  };
-} | {
-  confirmed_index: {};
-} | {
-  building_index: {};
-} | {
-  completed_index: {};
-} | {
-  unhandled_confirmed_index: {};
-};
+export type QueryMsg =
+  | {
+      bitcoin_config: {};
+    }
+  | {
+      checkpoint_config: {};
+    }
+  | {
+      header_config: {};
+    }
+  | {
+      signatory_key: {
+        addr: Addr;
+      };
+    }
+  | {
+      header_height: {};
+    }
+  | {
+      deposit_fees: {
+        index?: number | null;
+      };
+    }
+  | {
+      checkpoint_fees: {
+        index?: number | null;
+      };
+    }
+  | {
+      withdrawal_fees: {
+        address: string;
+        index?: number | null;
+      };
+    }
+  | {
+      completed_checkpoint_txs: {
+        limit: number;
+      };
+    }
+  | {
+      signed_recovery_txs: {};
+    }
+  | {
+      checkpoint_tx: {
+        index?: number | null;
+      };
+    }
+  | {
+      sidechain_block_hash: {};
+    }
+  | {
+      checkpoint_by_index: {
+        index: number;
+      };
+    }
+  | {
+      building_checkpoint: {};
+    }
+  | {
+      signing_recovery_txs: {
+        xpub: String;
+      };
+    }
+  | {
+      signing_txs_at_checkpoint_index: {
+        checkpoint_index: number;
+        xpub: String;
+      };
+    }
+  | {
+      processed_outpoint: {
+        key: string;
+      };
+    }
+  | {
+      confirmed_index: {};
+    }
+  | {
+      building_index: {};
+    }
+  | {
+      completed_index: {};
+    }
+  | {
+      unhandled_confirmed_index: {};
+    }
+  | {
+      change_rates: {
+        interval: number;
+      };
+    };
 export interface MigrateMsg {}
+export type CheckpointStatus = "building" | "signing" | "complete";
+export interface Checkpoint {
+  batches: Batch[];
+  deposits_enabled: boolean;
+  fee_rate: number;
+  fees_collected: number;
+  pending: [Dest, Coin][];
+  signed_at_btc_height?: number | null;
+  sigset: SignatorySet;
+  status: CheckpointStatus;
+}
+export interface Batch {
+  batch: BitcoinTx[];
+  signed_txs: number;
+}
+export interface BitcoinTx {
+  input: Input[];
+  lock_time: number;
+  output: Binary[];
+  signed_inputs: number;
+}
+export interface Input {
+  amount: number;
+  dest: number[];
+  est_witness_vsize: number;
+  prevout: Binary;
+  redeem_script: Binary;
+  script_pubkey: Binary;
+  signatures: ThresholdSig;
+  sigset_index: number;
+}
+export interface ThresholdSig {
+  len: number;
+  message: [
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+  ];
+  signed: number;
+  sigs: [Pubkey, Share][];
+  threshold: number;
+}
+export interface Pubkey {
+  bytes: number[];
+}
+export interface Share {
+  power: number;
+  sig?: Signature | null;
+}
+export interface Coin {
+  amount: Uint128;
+  denom: string;
+}
+export interface SignatorySet {
+  create_time: number;
+  index: number;
+  possible_vp: number;
+  present_vp: number;
+  signatories: Signatory[];
+}
+export interface Signatory {
+  pubkey: Pubkey;
+  voting_power: number;
+}
 export type Uint32 = number;
+export interface ChangeRates {
+  sigset_change: number;
+  withdrawal: number;
+}
 export type Uint64 = number;
 export type ArrayOfBinary = Binary[];
-export type ArrayOfTupleOfArraySize_32OfUint8AndUint32 = [[number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number], number][];
+export type NullableUint32 = number | null;
+export type Boolean = boolean;
+export type NullableString = String | null;
+export type ArrayOfTupleOfArraySize32OfUint8AndUint32 = [
+  [
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+  ],
+  number
+][];
