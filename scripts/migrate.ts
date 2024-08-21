@@ -31,7 +31,7 @@ async function main(): Promise<void> {
   const mnemonic = getMnemonic();
 
   // get signing client
-  const { client, address } = await connect(mnemonic, WasmLocalConfig);
+  const { client, address } = await connect(mnemonic, OraichainConfig);
 
   // upload contract
   const codeId = await uploadContracts(client, address, contracts);
@@ -41,7 +41,7 @@ async function main(): Promise<void> {
 
   const tx = await client.migrate(
     address,
-    "orai12q6jynhpp27yzny0dyzfvaj2qwee0ysh20fqlslgfej8axu4k50qnp7qqu",
+    "orai1y4ak3ea8m5q5g0glj8qhaf0mtdsp3jzxe04fftqec6fs27kj85nqcrj4qg",
     contractId.cwBitcoin,
     {},
     "auto"
