@@ -72,7 +72,7 @@ export type ExecuteMsg =
     }
   | {
       withdraw_to_bitcoin: {
-        script_pubkey: Binary;
+        btc_address: string;
       };
     }
   | {
@@ -141,8 +141,8 @@ export type ExecuteMsg =
       };
     }
   | {
-      change_btc_admin: {
-        new_admin: string;
+      change_btc_denom_owner: {
+        new_owner: string;
       };
     }
   | {
@@ -321,6 +321,9 @@ export type QueryMsg =
       change_rates: {
         interval: number;
       };
+    }
+  | {
+      value_locked: {};
     };
 export interface MigrateMsg {}
 export type CheckpointStatus = "building" | "signing" | "complete";

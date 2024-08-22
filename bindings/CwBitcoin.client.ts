@@ -4,51 +4,36 @@
  * and run the @oraichain/ts-codegen generate command to regenerate this file.
  */
 
-import {
-  CosmWasmClient,
-  SigningCosmWasmClient,
-  ExecuteResult,
-} from "@cosmjs/cosmwasm-stargate";
 import { StdFee } from "@cosmjs/amino";
 import {
+  CosmWasmClient,
+  ExecuteResult,
+  SigningCosmWasmClient,
+} from "@cosmjs/cosmwasm-stargate";
+import {
   Addr,
-  Uint128,
+  ArrayOfBinary,
+  ArrayOfTupleOfArraySize32OfUint8AndUint32,
   AssetInfo,
-  InstantiateMsg,
-  ExecuteMsg,
   Binary,
+  BitcoinConfig,
+  Boolean,
+  ChangeRates,
+  Checkpoint,
+  CheckpointConfig,
+  Coin,
   Dest,
+  HeaderConfig,
+  Metadata,
+  NullableString,
+  NullableUint32,
+  Ratio,
   Signature,
   String,
-  Ratio,
-  BitcoinConfig,
-  CheckpointConfig,
-  HeaderConfig,
-  WrappedHeader,
-  IbcDest,
-  Metadata,
-  DenomUnit,
-  QueryMsg,
-  MigrateMsg,
-  CheckpointStatus,
-  Checkpoint,
-  Batch,
-  BitcoinTx,
-  Input,
-  ThresholdSig,
-  Pubkey,
-  Share,
-  Coin,
-  SignatorySet,
-  Signatory,
+  Uint128,
   Uint32,
-  ChangeRates,
   Uint64,
-  ArrayOfBinary,
-  NullableUint32,
-  Boolean,
-  NullableString,
-  ArrayOfTupleOfArraySize32OfUint8AndUint32,
+  WrappedHeader,
 } from "./CwBitcoin.types";
 export interface CwBitcoinReadOnlyInterface {
   contractAddress: string;
@@ -94,6 +79,7 @@ export interface CwBitcoinReadOnlyInterface {
   completedIndex: () => Promise<Uint32>;
   unhandledConfirmedIndex: () => Promise<NullableUint32>;
   changeRates: ({ interval }: { interval: number }) => Promise<ChangeRates>;
+  valueLocked: () => Promise<Uint64>;
 }
 export class CwBitcoinQueryClient implements CwBitcoinReadOnlyInterface {
   client: CosmWasmClient;
@@ -125,6 +111,7 @@ export class CwBitcoinQueryClient implements CwBitcoinReadOnlyInterface {
     this.completedIndex = this.completedIndex.bind(this);
     this.unhandledConfirmedIndex = this.unhandledConfirmedIndex.bind(this);
     this.changeRates = this.changeRates.bind(this);
+    this.valueLocked = this.valueLocked.bind(this);
   }
 
   bitcoinConfig = async (): Promise<BitcoinConfig> => {
@@ -289,6 +276,11 @@ export class CwBitcoinQueryClient implements CwBitcoinReadOnlyInterface {
       },
     });
   };
+  valueLocked = async (): Promise<Uint64> => {
+    return this.client.queryContractSmart(this.contractAddress, {
+      value_locked: {},
+    });
+  };
 }
 export interface CwBitcoinInterface extends CwBitcoinReadOnlyInterface {
   contractAddress: string;
@@ -393,9 +385,9 @@ export interface CwBitcoinInterface extends CwBitcoinReadOnlyInterface {
   ) => Promise<ExecuteResult>;
   withdrawToBitcoin: (
     {
-      scriptPubkey,
+      btcAddress,
     }: {
-      scriptPubkey: Binary;
+      btcAddress: string;
     },
     _fee?: number | StdFee | "auto",
     _memo?: string,
@@ -465,11 +457,11 @@ export interface CwBitcoinInterface extends CwBitcoinReadOnlyInterface {
     _memo?: string,
     _funds?: Coin[]
   ) => Promise<ExecuteResult>;
-  changeBtcAdmin: (
+  changeBtcDenomOwner: (
     {
-      newAdmin,
+      newOwner,
     }: {
-      newAdmin: string;
+      newOwner: string;
     },
     _fee?: number | StdFee | "auto",
     _memo?: string,
@@ -516,7 +508,7 @@ export class CwBitcoinClient
     this.setSignatoryKey = this.setSignatoryKey.bind(this);
     this.addValidators = this.addValidators.bind(this);
     this.registerDenom = this.registerDenom.bind(this);
-    this.changeBtcAdmin = this.changeBtcAdmin.bind(this);
+    this.changeBtcDenomOwner = this.changeBtcDenomOwner.bind(this);
     this.triggerBeginBlock = this.triggerBeginBlock.bind(this);
   }
 
@@ -725,9 +717,9 @@ export class CwBitcoinClient
   };
   withdrawToBitcoin = async (
     {
-      scriptPubkey,
+      btcAddress,
     }: {
-      scriptPubkey: Binary;
+      btcAddress: string;
     },
     _fee: number | StdFee | "auto" = "auto",
     _memo?: string,
@@ -738,7 +730,7 @@ export class CwBitcoinClient
       this.contractAddress,
       {
         withdraw_to_bitcoin: {
-          script_pubkey: scriptPubkey,
+          btc_address: btcAddress,
         },
       },
       _fee,
@@ -882,11 +874,11 @@ export class CwBitcoinClient
       _funds
     );
   };
-  changeBtcAdmin = async (
+  changeBtcDenomOwner = async (
     {
-      newAdmin,
+      newOwner,
     }: {
-      newAdmin: string;
+      newOwner: string;
     },
     _fee: number | StdFee | "auto" = "auto",
     _memo?: string,
@@ -896,8 +888,8 @@ export class CwBitcoinClient
       this.sender,
       this.contractAddress,
       {
-        change_btc_admin: {
-          new_admin: newAdmin,
+        change_btc_denom_owner: {
+          new_owner: newOwner,
         },
       },
       _fee,

@@ -1139,7 +1139,21 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@oraichain/bitcoin-bridge-wasm-sdk@^1.0.10":
+"@oraichain/bitcoin-bridge-contracts-sdk@^1.0.6":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@oraichain/bitcoin-bridge-contracts-sdk/-/bitcoin-bridge-contracts-sdk-1.0.9.tgz#e88ba5eaf616252b011903ba06cf6157e484e67e"
+  integrity sha512-GgAfjzBU02e1azAzp4fyzW6gEXrZjwmNYnPwWeAPwR/D40T9cxdInHRh4fS8/vZEZQQFhPUiKPOLyHSlR3S/wA==
+
+"@oraichain/bitcoin-bridge-lib-js@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@oraichain/bitcoin-bridge-lib-js/-/bitcoin-bridge-lib-js-1.0.9.tgz#5d21c0dd19c4d192792511c35bc952c591e6b958"
+  integrity sha512-cgOyjb3l9i33Q0eL2r+3jaHXb3dsdDsxoXQtRYaHEDmzorpe9d1PRJNl8jCMED0zz7Pvd8NvY/bTwqKseH2ULg==
+  dependencies:
+    "@oraichain/bitcoin-bridge-contracts-sdk" "^1.0.6"
+    "@oraichain/bitcoin-bridge-wasm-sdk" "^1.0.6"
+    bitcoinjs-lib "^6.0.1"
+
+"@oraichain/bitcoin-bridge-wasm-sdk@^1.0.10", "@oraichain/bitcoin-bridge-wasm-sdk@^1.0.6":
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/@oraichain/bitcoin-bridge-wasm-sdk/-/bitcoin-bridge-wasm-sdk-1.0.10.tgz#121e1e82bc10bfa5af06db068ff59c0b5f8e501d"
   integrity sha512-lA0Eh1X4YxVa2pMZNrY9GKumBCINA4kK8Sintjrq7ugG+3lltb5of6iAvGUHWpUTJjRK4xCcoG5oq3QIOTd26g==
@@ -1688,7 +1702,7 @@ bip39@^3.0.4:
   dependencies:
     "@noble/hashes" "^1.2.0"
 
-bitcoinjs-lib@^6.1.6:
+bitcoinjs-lib@^6.0.1, bitcoinjs-lib@^6.1.6:
   version "6.1.6"
   resolved "https://registry.yarnpkg.com/bitcoinjs-lib/-/bitcoinjs-lib-6.1.6.tgz#f57c17c82511f860f11946d784c18da39f8618a8"
   integrity sha512-Fk8+Vc+e2rMoDU5gXkW9tD+313rhkm5h6N9HfZxXvYU9LedttVvmXKTgd9k5rsQJjkSfsv6XRM8uhJv94SrvcA==

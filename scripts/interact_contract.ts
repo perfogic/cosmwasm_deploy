@@ -3,11 +3,19 @@ import { connect } from "./helpers/connect";
 import { uploadContracts } from "./helpers/contract";
 import { OraichainConfig } from "./networks";
 import { CwBitcoinClient } from "../bindings";
-import { toBinaryBlockHeader } from "@oraichain/bitcoin-bridge-wasm-sdk";
+import {
+  fromBase64Script,
+  fromBinaryScript,
+  toBinaryBlockHeader,
+  toBinaryScript,
+} from "@oraichain/bitcoin-bridge-wasm-sdk";
 import BIP32Factory from "bip32";
 import * as ecc from "tiny-secp256k1";
 import * as btc from "bitcoinjs-lib";
+import { generateDepositAddress } from "@oraichain/bitcoin-bridge-lib-js";
+import { coin } from "@cosmjs/stargate";
 
+// orai16qnhuc5jpp4h322ju4ass3z05hw2du0e9k5t5knzwcqyjr3rmzrsa8s5ag
 async function main(): Promise<void> {
   // get the mnemonic
   const mnemonic = getMnemonic();
@@ -27,12 +35,62 @@ async function main(): Promise<void> {
   const xpriv = node.toBase58();
   const xpub = node.neutered().toBase58();
 
+  const depositAddress = await generateDepositAddress({
+    dest: {
+      address: "orai1ehmhqcn8erf3dgavrca69zgp4rtxj5kqgtcnyd",
+    },
+    relayers: ["http://18.191.171.150:8000"],
+    network: "testnet",
+  });
+  console.log(depositAddress);
+
   // upload contract
   const cwBitcoinClient = new CwBitcoinClient(
     client,
     address,
-    "orai1zzvs74k585jwan9mf2xxlx9dppwk8m9z2lc6r4836vhdgtfn4vxss3lf8h"
+    "orai16qnhuc5jpp4h322ju4ass3z05hw2du0e9k5t5knzwcqyjr3rmzrsa8s5ag"
   );
+
+  // WITHDRAW
+  // const withdrawAddress = "tb1qewgfymc9ssrszh7dh202rtsgz3yjzvyyk77vzv";
+
+  // console.log(
+  //   btc.address
+  //     .toOutputScript(withdrawAddress, btc.networks.testnet)
+  //     .toString("hex")
+  // );
+
+  // const tx = await cwBitcoinClient.withdrawToBitcoin(
+  //   {
+  //     btcAddress: withdrawAddress,
+  //   },
+  //   "auto",
+  //   "",
+  //   [
+  //     coin(
+  //       21000000000,
+  //       "factory/orai17hyr3eg92fv34fdnkend48scu32hn26gqxw3hnwkfy904lk9r09qqzty42/XuanDang"
+  //     ),
+  //   ]
+  // );
+  // console.log(tx.transactionHash);
+
+  // UPDATE BITCOIN CONFIG
+  // const bitcoinConfig = await cwBitcoinClient.bitcoinConfig();
+  // const tx = await cwBitcoinClient.updateBitcoinConfig({
+  //   config: {
+  //     ...bitcoinConfig,
+  //     min_withdrawal_checkpoints: 0,
+  //   },
+  // });
+  // console.log(tx.transactionHash);
+
+  // console.log(await cwBitcoinClient.valueLocked());
+
+  // const tx = await cwBitcoinClient.changeBtcDenomOwner({
+  //   newOwner: "orai16qnhuc5jpp4h322ju4ass3z05hw2du0e9k5t5knzwcqyjr3rmzrsa8s5ag",
+  // });
+  // console.log(tx.transactionHash);
 
   // UPDATE CONFIG
   // const tx = await cwBitcoinClient.updateConfig({
@@ -46,12 +104,9 @@ async function main(): Promise<void> {
   // ADD VALIDATORS
   // const array = new Uint8Array(32);
   // const tx = await cwBitcoinClient.addValidators({
-  //   addrs: [
-  //     "orai163gprd7pnv2xt664fm7nx04j6wh587fd0d4aw6",
-  //     "orai1kcppeg78s6fmyjsw5rjvh06f9jm2uhpdnckzw8",
-  //   ],
-  //   consensusKeys: [Array.from(array.fill(0)), Array.from(array.fill(1))],
-  //   votingPowers: [10, 10],
+  //   addrs: ["orai163gprd7pnv2xt664fm7nx04j6wh587fd0d4aw6"],
+  //   consensusKeys: [Array.from(array.fill(0))],
+  //   votingPowers: [10],
   // });
   // console.log(tx.transactionHash);
 
@@ -60,7 +115,7 @@ async function main(): Promise<void> {
   //   config: {
   //     max_length: 24192,
   //     max_time_increase: 2 * 60 * 60,
-  //     trusted_height: 2574432,
+  //     trusted_height: 2872800,
   //     retarget_interval: 2016,
   //     target_spacing: 10 * 60,
   //     target_timespan: 2016 * (10 * 60),
@@ -69,14 +124,14 @@ async function main(): Promise<void> {
   //     min_difficulty_blocks: true,
   //     trusted_header: Buffer.from(
   //       toBinaryBlockHeader({
-  //         version: 536870912,
+  //         version: 654221312,
   //         prev_blockhash:
-  //           "000000000000001f6d8dc4976552a596eff2eb0df15b0d9ee61a55091a2050c2",
+  //           "000000000000000591b541ed7088c4ce52fd10a0b99a4b5db377a3c1ab198756",
   //         merkle_root:
-  //           "03a2f5712c4c44daafa6475007de611b91be9738fc005788b7072153d651f36f",
-  //         time: 1705736135,
-  //         bits: 422015362,
-  //         nonce: 3433041756,
+  //           "7f718cbfe30ad75f698ac6fdacb0a5c53aae8dfab2c5642a657fb8e03c766880",
+  //         time: 1723142223,
+  //         bits: 420466436,
+  //         nonce: 732839121,
   //       })
   //     ).toString("base64"),
   //   },
