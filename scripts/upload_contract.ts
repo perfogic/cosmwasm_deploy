@@ -6,9 +6,13 @@ import { OraichainConfig, WasmLocalConfig } from "./networks";
 import { Cw20Coin } from "../bindings/Cw20.types";
 
 const contracts: Contract[] = [
+  // {
+  //   name: "cw_bitcoin",
+  //   wasmFile: "./contracts/cw-bitcoin.wasm",
+  // },
   {
-    name: "cw_bitcoin",
-    wasmFile: "./contracts/cw-bitcoin.wasm",
+    name: "read_write_state",
+    wasmFile: "./contracts/read-write-state.wasm",
   },
   // {
   //   name: "token_factory",
@@ -29,7 +33,8 @@ async function main(): Promise<void> {
   const codeId = await uploadContracts(client, address, contracts);
   const contractId = {
     // tokenFactory: codeId.token_factory,
-    cwBitcoin: codeId.cw_bitcoin,
+    // cwBitcoin: codeId.cw_bitcoin,
+    readWriteState: codeId.read_write_state,
   };
 
   // const info0 = await client.instantiate(
@@ -46,28 +51,43 @@ async function main(): Promise<void> {
   // );
   // console.log(info0.contractAddress);
 
-  const initMsg: InstantiateMsg = {
-    token_factory_addr:
-      "orai17hyr3eg92fv34fdnkend48scu32hn26gqxw3hnwkfy904lk9r09qqzty42",
-    relayer_fee: "0",
-    relayer_fee_receiver: "orai1rchnkdpsxzhquu63y6r4j4t57pnc9w8ehdhedx",
-    relayer_fee_token: {
-      native_token: {
-        denom: "orai",
-      },
-    },
-    token_fee_receiver: "orai1rchnkdpsxzhquu63y6r4j4t57pnc9w8ehdhedx",
-    osor_entry_point_contract:
-      "orai1yglsm0u2x3xmct9kq3lxa654cshaxj9j5d9rw5enemkkkdjgzj7sr3gwt0",
-  };
+  // const initMsg: InstantiateMsg = {
+  //   token_factory_addr:
+  //     "orai17hyr3eg92fv34fdnkend48scu32hn26gqxw3hnwkfy904lk9r09qqzty42",
+  //   relayer_fee: "0",
+  //   relayer_fee_receiver: "orai1rchnkdpsxzhquu63y6r4j4t57pnc9w8ehdhedx",
+  //   relayer_fee_token: {
+  //     native_token: {
+  //       denom: "orai",
+  //     },
+  //   },
+  //   token_fee_receiver: "orai1rchnkdpsxzhquu63y6r4j4t57pnc9w8ehdhedx",
+  //   osor_entry_point_contract:
+  //     "orai1yglsm0u2x3xmct9kq3lxa654cshaxj9j5d9rw5enemkkkdjgzj7sr3gwt0",
+  // };
+
+  // const info = await client.instantiate(
+  //   address,
+  //   contractId.cwBitcoin,
+  //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //   // @ts-ignore
+  //   initMsg,
+  //   "cw bitcoin test",
+  //   "auto",
+  //   {
+  //     admin: address,
+  //   }
+  // );
 
   const info = await client.instantiate(
     address,
-    contractId.cwBitcoin,
+    contractId.readWriteState,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    initMsg,
-    "cw bitcoin test",
+    {
+      count: 0,
+    },
+    "read write state test",
     "auto",
     {
       admin: address,
