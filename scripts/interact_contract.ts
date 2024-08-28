@@ -35,14 +35,14 @@ async function main(): Promise<void> {
   const xpriv = node.toBase58();
   const xpub = node.neutered().toBase58();
 
-  const depositAddress = await generateDepositAddress({
-    dest: {
-      address: "orai1ehmhqcn8erf3dgavrca69zgp4rtxj5kqgtcnyd",
-    },
-    relayers: ["http://18.191.171.150:8000"],
-    network: "testnet",
-  });
-  console.log(depositAddress);
+  // const depositAddress = await generateDepositAddress({
+  //   dest: {
+  //     address: "orai1ehmhqcn8erf3dgavrca69zgp4rtxj5kqgtcnyd",
+  //   },
+  //   relayers: ["http://18.191.171.150:8000"],
+  //   network: "testnet",
+  // });
+  // console.log(depositAddress);
 
   // upload contract
   const cwBitcoinClient = new CwBitcoinClient(
@@ -111,32 +111,32 @@ async function main(): Promise<void> {
   // console.log(tx.transactionHash);
 
   // UPDATE HEADER CONFIG
-  // const tx = await cwBitcoinClient.updateHeaderConfig({
-  //   config: {
-  //     max_length: 24192,
-  //     max_time_increase: 2 * 60 * 60,
-  //     trusted_height: 2872800,
-  //     retarget_interval: 2016,
-  //     target_spacing: 10 * 60,
-  //     target_timespan: 2016 * (10 * 60),
-  //     max_target: 0x1d00ffff,
-  //     retargeting: true,
-  //     min_difficulty_blocks: true,
-  //     trusted_header: Buffer.from(
-  //       toBinaryBlockHeader({
-  //         version: 654221312,
-  //         prev_blockhash:
-  //           "000000000000000591b541ed7088c4ce52fd10a0b99a4b5db377a3c1ab198756",
-  //         merkle_root:
-  //           "7f718cbfe30ad75f698ac6fdacb0a5c53aae8dfab2c5642a657fb8e03c766880",
-  //         time: 1723142223,
-  //         bits: 420466436,
-  //         nonce: 732839121,
-  //       })
-  //     ).toString("base64"),
-  //   },
-  // });
-  // console.log(tx.transactionHash);
+  const tx = await cwBitcoinClient.updateHeaderConfig({
+    config: {
+      max_length: 24192,
+      max_time_increase: 2 * 60 * 60,
+      trusted_height: 2872800,
+      retarget_interval: 2016,
+      target_spacing: 10 * 60,
+      target_timespan: 2016 * (10 * 60),
+      max_target: 0x1d00ffff,
+      retargeting: true,
+      min_difficulty_blocks: true,
+      trusted_header: Buffer.from(
+        toBinaryBlockHeader({
+          version: 654221312,
+          prev_blockhash:
+            "000000000000000591b541ed7088c4ce52fd10a0b99a4b5db377a3c1ab198756",
+          merkle_root:
+            "7f718cbfe30ad75f698ac6fdacb0a5c53aae8dfab2c5642a657fb8e03c766880",
+          time: 1723142223,
+          bits: 420466436,
+          nonce: 732839121,
+        })
+      ).toString("base64"),
+    },
+  });
+  console.log(tx.transactionHash);
 }
 
 main().then(
