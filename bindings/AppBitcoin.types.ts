@@ -12,23 +12,26 @@ export type AssetInfo =
       };
     };
 export interface InstantiateMsg {
+  light_client_contract: Addr;
   osor_entry_point_contract?: Addr | null;
   relayer_fee: Uint128;
   relayer_fee_receiver: Addr;
   relayer_fee_token: AssetInfo;
   swap_router_contract?: Addr | null;
-  token_factory_addr: Addr;
+  token_factory_contract: Addr;
   token_fee_receiver: Addr;
 }
 export type ExecuteMsg =
   | {
       update_config: {
+        light_client_contract?: Addr | null;
+        osor_entry_point_contract?: Addr | null;
         owner?: Addr | null;
         relayer_fee?: Uint128 | null;
         relayer_fee_receiver?: Addr | null;
         relayer_fee_token?: AssetInfo | null;
         swap_router_contract?: Addr | null;
-        token_factory_addr?: Addr | null;
+        token_factory_contract?: Addr | null;
         token_fee?: Ratio | null;
         token_fee_receiver?: Addr | null;
       };
@@ -41,16 +44,6 @@ export type ExecuteMsg =
   | {
       update_checkpoint_config: {
         config: CheckpointConfig;
-      };
-    }
-  | {
-      update_header_config: {
-        config: HeaderConfig;
-      };
-    }
-  | {
-      relay_headers: {
-        headers: WrappedHeader[];
       };
     }
   | {
@@ -194,22 +187,6 @@ export interface CheckpointConfig {
   target_checkpoint_inclusion: number;
   user_fee_factor: number;
 }
-export interface HeaderConfig {
-  max_length: number;
-  max_target: number;
-  max_time_increase: number;
-  min_difficulty_blocks: boolean;
-  retarget_interval: number;
-  retargeting: boolean;
-  target_spacing: number;
-  target_timespan: number;
-  trusted_header: Binary;
-  trusted_height: number;
-}
-export interface WrappedHeader {
-  header: Binary;
-  height: number;
-}
 export interface IbcDest {
   memo: string;
   receiver: string;
@@ -242,15 +219,9 @@ export type QueryMsg =
       checkpoint_config: {};
     }
   | {
-      header_config: {};
-    }
-  | {
       signatory_key: {
         addr: Addr;
       };
-    }
-  | {
-      header_height: {};
     }
   | {
       deposit_fees: {
@@ -280,9 +251,6 @@ export type QueryMsg =
       checkpoint_tx: {
         index?: number | null;
       };
-    }
-  | {
-      sidechain_block_hash: {};
     }
   | {
       checkpoint_by_index: {
@@ -330,7 +298,7 @@ export type QueryMsg =
     }
   | {
       staking_validator: {
-        addr: string;
+        val_addr: string;
       };
     };
 export interface MigrateMsg {}
@@ -435,13 +403,14 @@ export interface ChangeRates {
 export type Uint64 = number;
 export type ArrayOfBinary = Binary[];
 export interface ConfigResponse {
+  light_client_contract: Addr;
   osor_entry_point_contract?: Addr | null;
   owner: Addr;
   relayer_fee: Uint128;
   relayer_fee_receiver: Addr;
   relayer_fee_token: AssetInfo;
   swap_router_contract?: Addr | null;
-  token_factory_addr: Addr;
+  token_factory_contract: Addr;
   token_fee: Ratio;
   token_fee_receiver: Addr;
 }

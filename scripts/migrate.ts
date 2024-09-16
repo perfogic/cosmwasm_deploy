@@ -14,9 +14,13 @@ const contracts: Contract[] = [
   //   name: "cw_bridge_adapter",
   //   wasmFile: "./contracts/cw-tonbridge-bridge.wasm",
   // },
+  // {
+  //   name: "cw_bitcoin",
+  //   wasmFile: "./contracts/cw-bitcoin.wasm",
+  // },
   {
-    name: "cw_bitcoin",
-    wasmFile: "./contracts/cw-bitcoin.wasm",
+    name: "cw_app_bitcoin",
+    wasmFile: "./contracts/cw-app-bitcoin.wasm",
   },
   // {
   //   name: "token_factory",
@@ -31,18 +35,19 @@ async function main(): Promise<void> {
   const mnemonic = getMnemonic();
 
   // get signing client
-  const { client, address } = await connect(mnemonic, OraichainConfig);
+  const { client, address } = await connect(mnemonic, WasmLocalConfig);
 
   // upload contract
   const codeId = await uploadContracts(client, address, contracts);
   const contractId = {
-    cwBitcoin: codeId.cw_bitcoin,
+    // cwBitcoin: codeId.cw_bitcoin,
+    cwBitcoinApp: codeId.cw_app_bitcoin,
   };
 
   const tx = await client.migrate(
     address,
-    "orai16qnhuc5jpp4h322ju4ass3z05hw2du0e9k5t5knzwcqyjr3rmzrsa8s5ag",
-    contractId.cwBitcoin,
+    "orai14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9savsjyw",
+    contractId.cwBitcoinApp,
     {},
     "auto"
   );

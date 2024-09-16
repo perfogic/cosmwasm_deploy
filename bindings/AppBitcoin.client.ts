@@ -23,8 +23,6 @@ import {
   Ratio,
   BitcoinConfig,
   CheckpointConfig,
-  HeaderConfig,
-  WrappedHeader,
   IbcDest,
   Metadata,
   DenomUnit,
@@ -50,15 +48,13 @@ import {
   Boolean,
   NullableString,
   ArrayOfTupleOfArraySize32OfUint8AndUint32,
-} from "./CwBitcoin.types";
-export interface CwBitcoinReadOnlyInterface {
+} from "./AppBitcoin.types";
+export interface AppBitcoinReadOnlyInterface {
   contractAddress: string;
   config: () => Promise<ConfigResponse>;
   bitcoinConfig: () => Promise<BitcoinConfig>;
   checkpointConfig: () => Promise<CheckpointConfig>;
-  headerConfig: () => Promise<HeaderConfig>;
   signatoryKey: ({ addr }: { addr: Addr }) => Promise<NullableString>;
-  headerHeight: () => Promise<Uint32>;
   depositFees: ({ index }: { index?: number }) => Promise<Uint64>;
   checkpointFees: ({ index }: { index?: number }) => Promise<Uint64>;
   withdrawalFees: ({
@@ -75,7 +71,6 @@ export interface CwBitcoinReadOnlyInterface {
   }) => Promise<ArrayOfBinary>;
   signedRecoveryTxs: () => Promise<ArrayOfBinary>;
   checkpointTx: ({ index }: { index?: number }) => Promise<Binary>;
-  sidechainBlockHash: () => Promise<String>;
   checkpointByIndex: ({ index }: { index: number }) => Promise<Checkpoint>;
   buildingCheckpoint: () => Promise<Checkpoint>;
   signingRecoveryTxs: ({
@@ -97,9 +92,9 @@ export interface CwBitcoinReadOnlyInterface {
   unhandledConfirmedIndex: () => Promise<NullableUint32>;
   changeRates: ({ interval }: { interval: number }) => Promise<ChangeRates>;
   valueLocked: () => Promise<Uint64>;
-  stakingValidator: ({ addr }: { addr: string }) => Promise<String>;
+  stakingValidator: ({ valAddr }: { valAddr: string }) => Promise<String>;
 }
-export class CwBitcoinQueryClient implements CwBitcoinReadOnlyInterface {
+export class AppBitcoinQueryClient implements AppBitcoinReadOnlyInterface {
   client: CosmWasmClient;
   contractAddress: string;
 
@@ -109,16 +104,13 @@ export class CwBitcoinQueryClient implements CwBitcoinReadOnlyInterface {
     this.config = this.config.bind(this);
     this.bitcoinConfig = this.bitcoinConfig.bind(this);
     this.checkpointConfig = this.checkpointConfig.bind(this);
-    this.headerConfig = this.headerConfig.bind(this);
     this.signatoryKey = this.signatoryKey.bind(this);
-    this.headerHeight = this.headerHeight.bind(this);
     this.depositFees = this.depositFees.bind(this);
     this.checkpointFees = this.checkpointFees.bind(this);
     this.withdrawalFees = this.withdrawalFees.bind(this);
     this.completedCheckpointTxs = this.completedCheckpointTxs.bind(this);
     this.signedRecoveryTxs = this.signedRecoveryTxs.bind(this);
     this.checkpointTx = this.checkpointTx.bind(this);
-    this.sidechainBlockHash = this.sidechainBlockHash.bind(this);
     this.checkpointByIndex = this.checkpointByIndex.bind(this);
     this.buildingCheckpoint = this.buildingCheckpoint.bind(this);
     this.signingRecoveryTxs = this.signingRecoveryTxs.bind(this);
@@ -149,21 +141,11 @@ export class CwBitcoinQueryClient implements CwBitcoinReadOnlyInterface {
       checkpoint_config: {},
     });
   };
-  headerConfig = async (): Promise<HeaderConfig> => {
-    return this.client.queryContractSmart(this.contractAddress, {
-      header_config: {},
-    });
-  };
   signatoryKey = async ({ addr }: { addr: Addr }): Promise<NullableString> => {
     return this.client.queryContractSmart(this.contractAddress, {
       signatory_key: {
         addr,
       },
-    });
-  };
-  headerHeight = async (): Promise<Uint32> => {
-    return this.client.queryContractSmart(this.contractAddress, {
-      header_height: {},
     });
   };
   depositFees = async ({ index }: { index?: number }): Promise<Uint64> => {
@@ -215,11 +197,6 @@ export class CwBitcoinQueryClient implements CwBitcoinReadOnlyInterface {
       checkpoint_tx: {
         index,
       },
-    });
-  };
-  sidechainBlockHash = async (): Promise<String> => {
-    return this.client.queryContractSmart(this.contractAddress, {
-      sidechain_block_hash: {},
     });
   };
   checkpointByIndex = async ({
@@ -306,34 +283,42 @@ export class CwBitcoinQueryClient implements CwBitcoinReadOnlyInterface {
       value_locked: {},
     });
   };
-  stakingValidator = async ({ addr }: { addr: string }): Promise<String> => {
+  stakingValidator = async ({
+    valAddr,
+  }: {
+    valAddr: string;
+  }): Promise<String> => {
     return this.client.queryContractSmart(this.contractAddress, {
       staking_validator: {
-        addr,
+        val_addr: valAddr,
       },
     });
   };
 }
-export interface CwBitcoinInterface extends CwBitcoinReadOnlyInterface {
+export interface AppBitcoinInterface extends AppBitcoinReadOnlyInterface {
   contractAddress: string;
   sender: string;
   updateConfig: (
     {
+      lightClientContract,
+      osorEntryPointContract,
       owner,
       relayerFee,
       relayerFeeReceiver,
       relayerFeeToken,
       swapRouterContract,
-      tokenFactoryAddr,
+      tokenFactoryContract,
       tokenFee,
       tokenFeeReceiver,
     }: {
+      lightClientContract?: Addr;
+      osorEntryPointContract?: Addr;
       owner?: Addr;
       relayerFee?: Uint128;
       relayerFeeReceiver?: Addr;
       relayerFeeToken?: AssetInfo;
       swapRouterContract?: Addr;
-      tokenFactoryAddr?: Addr;
+      tokenFactoryContract?: Addr;
       tokenFee?: Ratio;
       tokenFeeReceiver?: Addr;
     },
@@ -356,26 +341,6 @@ export interface CwBitcoinInterface extends CwBitcoinReadOnlyInterface {
       config,
     }: {
       config: CheckpointConfig;
-    },
-    _fee?: number | StdFee | "auto",
-    _memo?: string,
-    _funds?: Coin[]
-  ) => Promise<ExecuteResult>;
-  updateHeaderConfig: (
-    {
-      config,
-    }: {
-      config: HeaderConfig;
-    },
-    _fee?: number | StdFee | "auto",
-    _memo?: string,
-    _funds?: Coin[]
-  ) => Promise<ExecuteResult>;
-  relayHeaders: (
-    {
-      headers,
-    }: {
-      headers: WrappedHeader[];
     },
     _fee?: number | StdFee | "auto",
     _memo?: string,
@@ -510,9 +475,9 @@ export interface CwBitcoinInterface extends CwBitcoinReadOnlyInterface {
     _funds?: Coin[]
   ) => Promise<ExecuteResult>;
 }
-export class CwBitcoinClient
-  extends CwBitcoinQueryClient
-  implements CwBitcoinInterface
+export class AppBitcoinClient
+  extends AppBitcoinQueryClient
+  implements AppBitcoinInterface
 {
   client: SigningCosmWasmClient;
   sender: string;
@@ -530,8 +495,6 @@ export class CwBitcoinClient
     this.updateConfig = this.updateConfig.bind(this);
     this.updateBitcoinConfig = this.updateBitcoinConfig.bind(this);
     this.updateCheckpointConfig = this.updateCheckpointConfig.bind(this);
-    this.updateHeaderConfig = this.updateHeaderConfig.bind(this);
-    this.relayHeaders = this.relayHeaders.bind(this);
     this.relayDeposit = this.relayDeposit.bind(this);
     this.relayCheckpoint = this.relayCheckpoint.bind(this);
     this.withdrawToBitcoin = this.withdrawToBitcoin.bind(this);
@@ -546,21 +509,25 @@ export class CwBitcoinClient
 
   updateConfig = async (
     {
+      lightClientContract,
+      osorEntryPointContract,
       owner,
       relayerFee,
       relayerFeeReceiver,
       relayerFeeToken,
       swapRouterContract,
-      tokenFactoryAddr,
+      tokenFactoryContract,
       tokenFee,
       tokenFeeReceiver,
     }: {
+      lightClientContract?: Addr;
+      osorEntryPointContract?: Addr;
       owner?: Addr;
       relayerFee?: Uint128;
       relayerFeeReceiver?: Addr;
       relayerFeeToken?: AssetInfo;
       swapRouterContract?: Addr;
-      tokenFactoryAddr?: Addr;
+      tokenFactoryContract?: Addr;
       tokenFee?: Ratio;
       tokenFeeReceiver?: Addr;
     },
@@ -573,12 +540,14 @@ export class CwBitcoinClient
       this.contractAddress,
       {
         update_config: {
+          light_client_contract: lightClientContract,
+          osor_entry_point_contract: osorEntryPointContract,
           owner,
           relayer_fee: relayerFee,
           relayer_fee_receiver: relayerFeeReceiver,
           relayer_fee_token: relayerFeeToken,
           swap_router_contract: swapRouterContract,
-          token_factory_addr: tokenFactoryAddr,
+          token_factory_contract: tokenFactoryContract,
           token_fee: tokenFee,
           token_fee_receiver: tokenFeeReceiver,
         },
@@ -627,52 +596,6 @@ export class CwBitcoinClient
       {
         update_checkpoint_config: {
           config,
-        },
-      },
-      _fee,
-      _memo,
-      _funds
-    );
-  };
-  updateHeaderConfig = async (
-    {
-      config,
-    }: {
-      config: HeaderConfig;
-    },
-    _fee: number | StdFee | "auto" = "auto",
-    _memo?: string,
-    _funds?: Coin[]
-  ): Promise<ExecuteResult> => {
-    return await this.client.execute(
-      this.sender,
-      this.contractAddress,
-      {
-        update_header_config: {
-          config,
-        },
-      },
-      _fee,
-      _memo,
-      _funds
-    );
-  };
-  relayHeaders = async (
-    {
-      headers,
-    }: {
-      headers: WrappedHeader[];
-    },
-    _fee: number | StdFee | "auto" = "auto",
-    _memo?: string,
-    _funds?: Coin[]
-  ): Promise<ExecuteResult> => {
-    return await this.client.execute(
-      this.sender,
-      this.contractAddress,
-      {
-        relay_headers: {
-          headers,
         },
       },
       _fee,
