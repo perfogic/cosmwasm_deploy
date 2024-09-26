@@ -1139,21 +1139,20 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@oraichain/bitcoin-bridge-contracts-sdk@^1.0.6":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@oraichain/bitcoin-bridge-contracts-sdk/-/bitcoin-bridge-contracts-sdk-1.0.9.tgz#e88ba5eaf616252b011903ba06cf6157e484e67e"
-  integrity sha512-GgAfjzBU02e1azAzp4fyzW6gEXrZjwmNYnPwWeAPwR/D40T9cxdInHRh4fS8/vZEZQQFhPUiKPOLyHSlR3S/wA==
+"@oraichain/bitcoin-bridge-contracts-sdk@latest":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@oraichain/bitcoin-bridge-contracts-sdk/-/bitcoin-bridge-contracts-sdk-1.1.6.tgz#a8c2c1e1393591e7db31dd5539627eef21c4dbca"
+  integrity sha512-vMOTD0Qjol2Rlu8LMIwC6uVeQcq0keQnPCcOLc6vrAfVBYR2TqZxefyg8JY27LVzCfSIKSFmL5AEf9jNjR0/0w==
 
-"@oraichain/bitcoin-bridge-lib-js@^1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@oraichain/bitcoin-bridge-lib-js/-/bitcoin-bridge-lib-js-1.0.9.tgz#5d21c0dd19c4d192792511c35bc952c591e6b958"
-  integrity sha512-cgOyjb3l9i33Q0eL2r+3jaHXb3dsdDsxoXQtRYaHEDmzorpe9d1PRJNl8jCMED0zz7Pvd8NvY/bTwqKseH2ULg==
+"@oraichain/bitcoin-bridge-lib-js@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@oraichain/bitcoin-bridge-lib-js/-/bitcoin-bridge-lib-js-1.1.6.tgz#afc5c597b74cb3a6a2aaf48d8e9d4ea8999f4275"
+  integrity sha512-9XT0O3IC7Hv7mElgIIe1EU+hgsiybt1PkIYdDTxIXkhZ7BFBe0GGkpwEyVQpFcinpXEutL0ujqTVg4DAiQxvRw==
   dependencies:
-    "@oraichain/bitcoin-bridge-contracts-sdk" "^1.0.6"
-    "@oraichain/bitcoin-bridge-wasm-sdk" "^1.0.6"
+    "@oraichain/bitcoin-bridge-contracts-sdk" latest
     bitcoinjs-lib "^6.0.1"
 
-"@oraichain/bitcoin-bridge-wasm-sdk@^1.0.10", "@oraichain/bitcoin-bridge-wasm-sdk@^1.0.6":
+"@oraichain/bitcoin-bridge-wasm-sdk@^1.0.10":
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/@oraichain/bitcoin-bridge-wasm-sdk/-/bitcoin-bridge-wasm-sdk-1.0.10.tgz#121e1e82bc10bfa5af06db068ff59c0b5f8e501d"
   integrity sha512-lA0Eh1X4YxVa2pMZNrY9GKumBCINA4kK8Sintjrq7ugG+3lltb5of6iAvGUHWpUTJjRK4xCcoG5oq3QIOTd26g==

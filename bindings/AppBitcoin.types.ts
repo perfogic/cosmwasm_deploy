@@ -47,6 +47,9 @@ export type ExecuteMsg =
       };
     }
   | {
+      register_validator: {};
+    }
+  | {
       relay_deposit: {
         btc_height: number;
         btc_proof: Binary;
@@ -85,46 +88,6 @@ export type ExecuteMsg =
   | {
       set_signatory_key: {
         xpub: String;
-      };
-    }
-  | {
-      add_validators: {
-        addrs: string[];
-        consensus_keys: [
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number,
-          number
-        ][];
-        voting_powers: number[];
       };
     }
   | {
@@ -297,7 +260,7 @@ export type QueryMsg =
       value_locked: {};
     }
   | {
-      staking_validator: {
+      check_eligible_validator: {
         val_addr: string;
       };
     };
@@ -400,6 +363,7 @@ export interface ChangeRates {
   sigset_change: number;
   withdrawal: number;
 }
+export type Boolean = boolean;
 export type Uint64 = number;
 export type ArrayOfBinary = Binary[];
 export interface ConfigResponse {
@@ -415,7 +379,6 @@ export interface ConfigResponse {
   token_fee_receiver: Addr;
 }
 export type NullableUint32 = number | null;
-export type Boolean = boolean;
 export type NullableString = String | null;
 export type ArrayOfTupleOfArraySize32OfUint8AndUint32 = [
   [

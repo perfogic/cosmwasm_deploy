@@ -6,3 +6,4 @@ export * from "./EntryPoint.client";
 export * from "./IbcHooks.client";
 export * from "./ProxyBitcoin.client";
 export * from "./AppBitcoin.client";
+export * from "./LightClientBitcoin.client";

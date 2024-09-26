@@ -17,7 +17,7 @@
     "@cosmjs/stargate": "^0.32.4",
     "@cosmjs/tendermint-rpc": "^0.32.2",
     "@injectivelabs/sdk-ts": "^1.14.4",
-    "@oraichain/bitcoin-bridge-lib-js": "^1.0.9",
+    "@oraichain/bitcoin-bridge-lib-js": "^1.1.6",
     "@oraichain/bitcoin-bridge-wasm-sdk": "^1.0.10",
     "@oraichain/dao-contracts-build": "^1.0.5",
     "@oraichain/oraibtc-wasm": "^1.0.11",

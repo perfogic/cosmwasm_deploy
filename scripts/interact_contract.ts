@@ -2,7 +2,7 @@ import { Contract, getMnemonic, loadContract } from "./helpers/utils";
 import { connect } from "./helpers/connect";
 import { uploadContracts } from "./helpers/contract";
 import { OraichainConfig, WasmLocalConfig } from "./networks";
-import { AppBitcoinClient, CwBitcoinClient } from "../bindings";
+import { AppBitcoinClient, LightClientBitcoinClient } from "../bindings";
 import {
   fromBase64Script,
   fromBinaryScript,
@@ -16,6 +16,7 @@ import { generateDepositAddress } from "@oraichain/bitcoin-bridge-lib-js";
 import { coin } from "@cosmjs/stargate";
 import crypto, { createHash } from "crypto";
 import { TokenfactoryClient } from "../bindings";
+import { fromBech32, toBech32 } from "@cosmjs/encoding";
 
 // mainnet: orai1plhnld6489hpxay9wfel8mp39esw625pnufq03p9tg0d8u60987s99l7z6
 // testnet: orai16qnhuc5jpp4h322ju4ass3z05hw2du0e9k5t5knzwcqyjr3rmzrsa8s5ag
@@ -54,22 +55,22 @@ async function main(): Promise<void> {
   //   "orai1plhnld6489hpxay9wfel8mp39esw625pnufq03p9tg0d8u60987s99l7z6"
   // );
 
+  const cwLightClientBitcoin = new LightClientBitcoinClient(
+    client,
+    address,
+    "orai1unyuj8qnmygvzuex3dwmg9yzt9alhvyeat0uu0jedg2wj33efl5qjs222y"
+  );
+
   const cwAppBitcoinClient = new AppBitcoinClient(
     client,
     address,
-    "orai14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9savsjyw"
-  );
-  console.log(address);
-  console.log(
-    await cwAppBitcoinClient.stakingValidator({
-      valAddr: "oraivaloper1r7yp29q0u7n5v49zmtp6k6w2wwzhqh3hwt0vwa",
-    })
+    "orai1xt4ahzz2x8hpkc0tk6ekte9x6crw4w6u0r67cyt3kz9syh24pd7sxfqs0x"
   );
 
-  // console.log(await client.execute(
+  let tx;
 
   // UPDATE CONFIG
-  // const tx = await cwBitcoinClient.updateConfig({
+  // tx = await cwAppBitcoinClient.updateConfig({
   //   tokenFee: {
   //     nominator: 0,
   //     denominator: 1000,
@@ -114,15 +115,15 @@ async function main(): Promise<void> {
   // console.log(await cwBitcoinClient.valueLocked());
 
   // CREATE DENOM
-  // const tx = await cwBitcoinClient.registerDenom(
-  //   {
-  //     subdenom: "obtc",
-  //   },
-  //   "auto",
-  //   "",
-  //   [coin("10000000", "orai")]
-  // );
-  // console.log(tx.transactionHash);
+  tx = await cwAppBitcoinClient.registerDenom(
+    {
+      subdenom: "obtc",
+    },
+    "auto",
+    "",
+    [coin("10000000", "orai")]
+  );
+  console.log(tx.transactionHash);
 
   // CHANGE DENOM OWNER
   // const tx = await cwBitcoinClient.changeBtcDenomOwner({
@@ -134,7 +135,7 @@ async function main(): Promise<void> {
   // let tokenFactoryClient = new TokenfactoryClient(
   //   client,
   //   address,
-  //   "orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9"
+  //   "orai19g9xuqrvz2frv905v3fc7puryfypluhg383q9zwsmedrlqekfgyszk9yva"
   // );
   // const tx = await tokenFactoryClient.burnTokens({
   //   amount: "110584000000",
@@ -171,7 +172,8 @@ async function main(): Promise<void> {
   // console.log(tx.transactionHash);
 
   // UPDATE HEADER CONFIG
-  // const tx = await cwBitcoinClient.updateHeaderConfig({
+  // mainnet
+  // tx = await cwLightClientBitcoin.updateHeaderConfig({
   //   config: {
   //     max_length: 24192,
   //     max_time_increase: 2 * 60 * 60,
@@ -197,6 +199,34 @@ async function main(): Promise<void> {
   //   },
   // });
   // console.log(tx.transactionHash);
+
+  // testnet
+  tx = await cwLightClientBitcoin.updateHeaderConfig({
+    config: {
+      max_length: 24192,
+      max_time_increase: 2 * 60 * 60,
+      trusted_height: 2981664,
+      retarget_interval: 2016,
+      target_spacing: 10 * 60,
+      target_timespan: 2016 * (10 * 60),
+      max_target: 0x1d00ffff,
+      retargeting: true,
+      min_difficulty_blocks: true,
+      trusted_header: Buffer.from(
+        toBinaryBlockHeader({
+          version: 830308352,
+          prev_blockhash:
+            "000000000000083c1306d75a0c18b0942d0ad0aecb878e24c164a9caa3fb2ad3",
+          merkle_root:
+            "c170d6636e84b023bdb3128ba375de72d25e31db4f7049694bff7bbf0b463020",
+          time: 1726956958,
+          bits: 436469756,
+          nonce: 17918350,
+        })
+      ).toString("base64"),
+    },
+  });
+  console.log(tx.transactionHash);
 }
 
 main().then(

@@ -17,8 +17,8 @@ const contracts: Contract[] = [
   },
 ];
 
-// entry point: orai1szpf5jc26fsqv367cevuu2u6uwlffnnsq3q6qgjxtvlgacn96hxq8m32x4
-// ibc hook: orai13hwesez4s6l6g0snvdm8e5cfunfya36v3n6qera6pxjv2yyy89mqk8d6g6
+// entry point: orai153r9tg33had5c5s54sqzn879xww2q2egektyqnpj6nwxt8wls70qm693vr
+// ibc hook: orai1f6jlx7d9y408tlzue7r2qcf79plp549n30yzqjajjud8vm7m4vdsgul657
 async function main(): Promise<void> {
   // get the mnemonic
   const mnemonic = getMnemonic();
@@ -45,7 +45,7 @@ async function main(): Promise<void> {
       admin: address,
     }
   );
-  console.log(entryPoint.contractAddress);
+  console.log("Entrypoint contract:", entryPoint.contractAddress);
 
   const ibcHooks = await client.instantiate(
     address,
@@ -62,7 +62,7 @@ async function main(): Promise<void> {
     }
   );
 
-  console.log(ibcHooks.contractAddress);
+  console.log("Ibchook contract", ibcHooks.contractAddress);
 
   const entryPointClient = new EntryPointClient(
     client,

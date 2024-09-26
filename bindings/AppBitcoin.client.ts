@@ -4,50 +4,35 @@
  * and run the @oraichain/ts-codegen generate command to regenerate this file.
  */
 
-import {
-  CosmWasmClient,
-  SigningCosmWasmClient,
-  ExecuteResult,
-} from "@cosmjs/cosmwasm-stargate";
 import { StdFee } from "@cosmjs/amino";
 import {
+  CosmWasmClient,
+  ExecuteResult,
+  SigningCosmWasmClient,
+} from "@cosmjs/cosmwasm-stargate";
+import {
   Addr,
-  Uint128,
+  ArrayOfBinary,
+  ArrayOfTupleOfArraySize32OfUint8AndUint32,
   AssetInfo,
-  InstantiateMsg,
-  ExecuteMsg,
   Binary,
+  BitcoinConfig,
+  Boolean,
+  ChangeRates,
+  Checkpoint,
+  CheckpointConfig,
+  Coin,
+  ConfigResponse,
   Dest,
+  Metadata,
+  NullableString,
+  NullableUint32,
+  Ratio,
   Signature,
   String,
-  Ratio,
-  BitcoinConfig,
-  CheckpointConfig,
-  IbcDest,
-  Metadata,
-  DenomUnit,
-  QueryMsg,
-  MigrateMsg,
-  CheckpointStatus,
-  Checkpoint,
-  Batch,
-  BitcoinTx,
-  Input,
-  ThresholdSig,
-  Pubkey,
-  Share,
-  Coin,
-  SignatorySet,
-  Signatory,
+  Uint128,
   Uint32,
-  ChangeRates,
   Uint64,
-  ArrayOfBinary,
-  ConfigResponse,
-  NullableUint32,
-  Boolean,
-  NullableString,
-  ArrayOfTupleOfArraySize32OfUint8AndUint32,
 } from "./AppBitcoin.types";
 export interface AppBitcoinReadOnlyInterface {
   contractAddress: string;
@@ -92,7 +77,11 @@ export interface AppBitcoinReadOnlyInterface {
   unhandledConfirmedIndex: () => Promise<NullableUint32>;
   changeRates: ({ interval }: { interval: number }) => Promise<ChangeRates>;
   valueLocked: () => Promise<Uint64>;
-  stakingValidator: ({ valAddr }: { valAddr: string }) => Promise<String>;
+  checkEligibleValidator: ({
+    valAddr,
+  }: {
+    valAddr: string;
+  }) => Promise<Boolean>;
 }
 export class AppBitcoinQueryClient implements AppBitcoinReadOnlyInterface {
   client: CosmWasmClient;
@@ -123,7 +112,7 @@ export class AppBitcoinQueryClient implements AppBitcoinReadOnlyInterface {
     this.unhandledConfirmedIndex = this.unhandledConfirmedIndex.bind(this);
     this.changeRates = this.changeRates.bind(this);
     this.valueLocked = this.valueLocked.bind(this);
-    this.stakingValidator = this.stakingValidator.bind(this);
+    this.checkEligibleValidator = this.checkEligibleValidator.bind(this);
   }
 
   config = async (): Promise<ConfigResponse> => {
@@ -283,13 +272,13 @@ export class AppBitcoinQueryClient implements AppBitcoinReadOnlyInterface {
       value_locked: {},
     });
   };
-  stakingValidator = async ({
+  checkEligibleValidator = async ({
     valAddr,
   }: {
     valAddr: string;
-  }): Promise<String> => {
+  }): Promise<Boolean> => {
     return this.client.queryContractSmart(this.contractAddress, {
-      staking_validator: {
+      check_eligible_validator: {
         val_addr: valAddr,
       },
     });
@@ -342,6 +331,11 @@ export interface AppBitcoinInterface extends AppBitcoinReadOnlyInterface {
     }: {
       config: CheckpointConfig;
     },
+    _fee?: number | StdFee | "auto",
+    _memo?: string,
+    _funds?: Coin[]
+  ) => Promise<ExecuteResult>;
+  registerValidator: (
     _fee?: number | StdFee | "auto",
     _memo?: string,
     _funds?: Coin[]
@@ -428,20 +422,6 @@ export interface AppBitcoinInterface extends AppBitcoinReadOnlyInterface {
     _memo?: string,
     _funds?: Coin[]
   ) => Promise<ExecuteResult>;
-  addValidators: (
-    {
-      addrs,
-      consensusKeys,
-      votingPowers,
-    }: {
-      addrs: string[];
-      consensusKeys: number[][];
-      votingPowers: number[];
-    },
-    _fee?: number | StdFee | "auto",
-    _memo?: string,
-    _funds?: Coin[]
-  ) => Promise<ExecuteResult>;
   registerDenom: (
     {
       metadata,
@@ -495,13 +475,13 @@ export class AppBitcoinClient
     this.updateConfig = this.updateConfig.bind(this);
     this.updateBitcoinConfig = this.updateBitcoinConfig.bind(this);
     this.updateCheckpointConfig = this.updateCheckpointConfig.bind(this);
+    this.registerValidator = this.registerValidator.bind(this);
     this.relayDeposit = this.relayDeposit.bind(this);
     this.relayCheckpoint = this.relayCheckpoint.bind(this);
     this.withdrawToBitcoin = this.withdrawToBitcoin.bind(this);
     this.submitCheckpointSignature = this.submitCheckpointSignature.bind(this);
     this.submitRecoverySignature = this.submitRecoverySignature.bind(this);
     this.setSignatoryKey = this.setSignatoryKey.bind(this);
-    this.addValidators = this.addValidators.bind(this);
     this.registerDenom = this.registerDenom.bind(this);
     this.changeBtcDenomOwner = this.changeBtcDenomOwner.bind(this);
     this.triggerBeginBlock = this.triggerBeginBlock.bind(this);
@@ -597,6 +577,22 @@ export class AppBitcoinClient
         update_checkpoint_config: {
           config,
         },
+      },
+      _fee,
+      _memo,
+      _funds
+    );
+  };
+  registerValidator = async (
+    _fee: number | StdFee | "auto" = "auto",
+    _memo?: string,
+    _funds?: Coin[]
+  ): Promise<ExecuteResult> => {
+    return await this.client.execute(
+      this.sender,
+      this.contractAddress,
+      {
+        register_validator: {},
       },
       _fee,
       _memo,
@@ -767,35 +763,6 @@ export class AppBitcoinClient
       {
         set_signatory_key: {
           xpub,
-        },
-      },
-      _fee,
-      _memo,
-      _funds
-    );
-  };
-  addValidators = async (
-    {
-      addrs,
-      consensusKeys,
-      votingPowers,
-    }: {
-      addrs: string[];
-      consensusKeys: number[][];
-      votingPowers: number[];
-    },
-    _fee: number | StdFee | "auto" = "auto",
-    _memo?: string,
-    _funds?: Coin[]
-  ): Promise<ExecuteResult> => {
-    return await this.client.execute(
-      this.sender,
-      this.contractAddress,
-      {
-        add_validators: {
-          addrs,
-          consensus_keys: consensusKeys,
-          voting_powers: votingPowers,
         },
       },
       _fee,

@@ -1,72 +1,71 @@
 import { Contract, getMnemonic, loadContract } from "./helpers/utils";
 import { connect } from "./helpers/connect";
 import { uploadContracts } from "./helpers/contract";
-import { InstantiateMsg } from "../bindings/AppBitcoin.types";
+import { InstantiateMsg as AppInstantiateMsg } from "../bindings/AppBitcoin.types";
+import { InstantiateMsg as LightClientInstantiateMsg } from "../bindings/LightClientBitcoin.types";
+import { InstantiateMsg as TfInstantiateMsg } from "../bindings/Tokenfactory.types";
 import { OraichainConfig, WasmLocalConfig } from "./networks";
-import { Cw20Coin } from "../bindings/Cw20.types";
 
 // cw bitcoin mainnet: orai18ffp5mu06pg55q9lj5hgkadtzadwfye4jl2pgfskuca84w7dcqjsezlqk2
 const contracts: Contract[] = [
-  // {
-  //   name: "cw_bitcoin",
-  //   wasmFile: "./contracts/cw-bitcoin.wasm",
-  // },
+  {
+    name: "cw_light_client_bitcoin",
+    wasmFile: "./contracts/cw-light-client-bitcoin.wasm",
+  },
   {
     name: "cw_app_bitcoin",
     wasmFile: "./contracts/cw-app-bitcoin.wasm",
   },
-  // {
-  //   name: "proxy_bitcoin",
-  //   wasmFile: "./contracts/proxy-bitcoin.wasm",
-  // },
-  // {
-  //   name: "read_write_state",
-  //   wasmFile: "./contracts/read-write-state.wasm",
-  // },
-  // {
-  //   name: "token_factory",
-  //   wasmFile: "./contracts/tokenfactory.wasm",
-  // },
+  {
+    name: "token_factory",
+    wasmFile: "./contracts/tokenfactory.wasm",
+  },
 ];
 
-// token factory: orai1hsnyup3wwxwzk6pyquzzgjjwyw2hn0mqzmc73khkuxxfsau5zskqykrq0z
-// bridge contract: orai12ykmayptxjn9qjyq45qlhv7sc8pl6hxqccrtsledngutnlfh9nssyw03xr
+// Light client bitcoin: orai1hntfu45etpkdf8prq6p6la9tsnk3u3muf5378kds73c7xd4qdzys48gaav
+// App bitcoin: orai14haqsatfqxh3jgzn6u7ggnece4vhv0nt8a8ml4rg29mln9hdjfdqgffekn
 async function main(): Promise<void> {
   // get the mnemonic
   const mnemonic = getMnemonic();
 
   // get signing client
-  const { client, address } = await connect(mnemonic, OraichainConfig);
+  const { client, address } = await connect(mnemonic, WasmLocalConfig);
 
   // upload contract
   const codeId = await uploadContracts(client, address, contracts);
   const contractId = {
-    // tokenFactory: codeId.token_factory,
-    // cwBitcoin: codeId.cw_bitcoin,
-    // proxyBitcoin: codeId.proxy_bitcoin,
-    // readWriteState: codeId.read_write_state,
+    tokenFactory: codeId.token_factory,
+    cwLightClientBitcoin: codeId.cw_light_client_bitcoin,
     cwAppBitcoin: codeId.cw_app_bitcoin,
   };
 
-  // const info0 = await client.instantiate(
-  //   address,
-  //   contractId.tokenFactory,
-  //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //   // @ts-ignore
-  //   {},
-  //   "token factory test",
-  //   "auto",
-  //   {
-  //     admin: address,
-  //   }
-  // );
-  // console.log(info0.contractAddress);
+  const tokenFactoryMsg: TfInstantiateMsg = {};
+  const tokenFactoryContract = await client.instantiate(
+    address,
+    contractId.tokenFactory,
+    tokenFactoryMsg,
+    "bitcoin app contract",
+    "auto",
+    {
+      admin: address,
+    }
+  );
 
-  const initMsg: InstantiateMsg = {
-    light_client_contract:
-      "orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9",
-    token_factory_contract:
-      "orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9",
+  const lightClientMsg: LightClientInstantiateMsg = {};
+  const lightClientContract = await client.instantiate(
+    address,
+    contractId.cwLightClientBitcoin,
+    lightClientMsg,
+    "bitcoin light client contract",
+    "auto",
+    {
+      admin: address,
+    }
+  );
+
+  const appMsg: AppInstantiateMsg = {
+    light_client_contract: lightClientContract.contractAddress,
+    token_factory_contract: tokenFactoryContract.contractAddress,
     relayer_fee: "0",
     relayer_fee_receiver: "orai1ehmhqcn8erf3dgavrca69zgp4rtxj5kqgtcnyd",
     relayer_fee_token: {
@@ -76,15 +75,15 @@ async function main(): Promise<void> {
     },
     token_fee_receiver: "orai1ehmhqcn8erf3dgavrca69zgp4rtxj5kqgtcnyd",
     osor_entry_point_contract:
-      "orai1yglsm0u2x3xmct9kq3lxa654cshaxj9j5d9rw5enemkkkdjgzj7sr3gwt0",
+      "orai14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9savsjyw",
   };
 
-  const info = await client.instantiate(
+  const appContract = await client.instantiate(
     address,
     contractId.cwAppBitcoin,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    initMsg,
+    appMsg,
     "bitcoin app contract",
     "auto",
     {
@@ -92,22 +91,8 @@ async function main(): Promise<void> {
     }
   );
 
-  // const info = await client.instantiate(
-  //   address,
-  //   contractId.readWriteState,
-  //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //   // @ts-ignore
-  //   {
-  //     count: 0,
-  //   },
-  //   "read write state test",
-  //   "auto",
-  //   {
-  //     admin: address,
-  //   }
-  // );
-
-  console.log(info.contractAddress);
+  console.log("Light client bitcoin:", lightClientContract.contractAddress);
+  console.log("App bitcoin:", appContract.contractAddress);
 }
 
 main().then(
