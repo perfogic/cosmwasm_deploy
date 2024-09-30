@@ -21,7 +21,7 @@ export const OsmosisConfig: Network = {
 
 export const OraichainConfig: Network = {
   chainId: "Oraichain",
-  rpcEndpoint: "https://orai-rpc.polkachu.com/",
+  rpcEndpoint: "http://3.14.142.99:26657/",
   prefix: "orai",
   gasPrice: GasPrice.fromString("0.002orai"),
   feeToken: "orai",

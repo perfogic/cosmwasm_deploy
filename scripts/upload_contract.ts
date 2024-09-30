@@ -16,40 +16,40 @@ const contracts: Contract[] = [
     name: "cw_app_bitcoin",
     wasmFile: "./contracts/cw-app-bitcoin.wasm",
   },
-  {
-    name: "token_factory",
-    wasmFile: "./contracts/tokenfactory.wasm",
-  },
+  // {
+  //   name: "token_factory",
+  //   wasmFile: "./contracts/tokenfactory.wasm",
+  // },
 ];
 
-// Light client bitcoin: orai1hntfu45etpkdf8prq6p6la9tsnk3u3muf5378kds73c7xd4qdzys48gaav
-// App bitcoin: orai14haqsatfqxh3jgzn6u7ggnece4vhv0nt8a8ml4rg29mln9hdjfdqgffekn
+// Light client bitcoin: orai1unyuj8qnmygvzuex3dwmg9yzt9alhvyeat0uu0jedg2wj33efl5qjs222y
+// App bitcoin: orai1xt4ahzz2x8hpkc0tk6ekte9x6crw4w6u0r67cyt3kz9syh24pd7sxfqs0x
 async function main(): Promise<void> {
   // get the mnemonic
   const mnemonic = getMnemonic();
 
   // get signing client
-  const { client, address } = await connect(mnemonic, WasmLocalConfig);
+  const { client, address } = await connect(mnemonic, OraichainConfig);
 
   // upload contract
   const codeId = await uploadContracts(client, address, contracts);
   const contractId = {
-    tokenFactory: codeId.token_factory,
+    // tokenFactory: codeId.token_factory,
     cwLightClientBitcoin: codeId.cw_light_client_bitcoin,
     cwAppBitcoin: codeId.cw_app_bitcoin,
   };
 
-  const tokenFactoryMsg: TfInstantiateMsg = {};
-  const tokenFactoryContract = await client.instantiate(
-    address,
-    contractId.tokenFactory,
-    tokenFactoryMsg,
-    "bitcoin app contract",
-    "auto",
-    {
-      admin: address,
-    }
-  );
+  // const tokenFactoryMsg: TfInstantiateMsg = {};
+  // const tokenFactoryContract = await client.instantiate(
+  //   address,
+  //   contractId.tokenFactory,
+  //   tokenFactoryMsg,
+  //   "bitcoin app contract",
+  //   "auto",
+  //   {
+  //     admin: address,
+  //   }
+  // );
 
   const lightClientMsg: LightClientInstantiateMsg = {};
   const lightClientContract = await client.instantiate(
@@ -65,17 +65,18 @@ async function main(): Promise<void> {
 
   const appMsg: AppInstantiateMsg = {
     light_client_contract: lightClientContract.contractAddress,
-    token_factory_contract: tokenFactoryContract.contractAddress,
+    token_factory_contract:
+      "orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9",
     relayer_fee: "0",
-    relayer_fee_receiver: "orai1ehmhqcn8erf3dgavrca69zgp4rtxj5kqgtcnyd",
+    relayer_fee_receiver: "orai1yzmjgpr08u7d9n9qqhvux9ckfgq32z77c04lkg",
     relayer_fee_token: {
       native_token: {
         denom: "orai",
       },
     },
-    token_fee_receiver: "orai1ehmhqcn8erf3dgavrca69zgp4rtxj5kqgtcnyd",
+    token_fee_receiver: "orai1yzmjgpr08u7d9n9qqhvux9ckfgq32z77c04lkg",
     osor_entry_point_contract:
-      "orai14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9savsjyw",
+      "orai1yglsm0u2x3xmct9kq3lxa654cshaxj9j5d9rw5enemkkkdjgzj7sr3gwt0",
   };
 
   const appContract = await client.instantiate(

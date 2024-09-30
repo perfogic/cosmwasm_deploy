@@ -2,7 +2,11 @@ import { Contract, getMnemonic, loadContract } from "./helpers/utils";
 import { connect } from "./helpers/connect";
 import { uploadContracts } from "./helpers/contract";
 import { OraichainConfig, WasmLocalConfig } from "./networks";
-import { AppBitcoinClient, LightClientBitcoinClient } from "../bindings";
+import {
+  AppBitcoinClient,
+  CwBitcoinClient,
+  LightClientBitcoinClient,
+} from "../bindings";
 import {
   fromBase64Script,
   fromBinaryScript,
@@ -25,16 +29,16 @@ async function main(): Promise<void> {
   const mnemonic = getMnemonic();
 
   // get signing client
-  const { client, address } = await connect(mnemonic, WasmLocalConfig);
+  const { client, address } = await connect(mnemonic, OraichainConfig);
 
   const bip32 = BIP32Factory(ecc);
-  // const seed = crypto.randomBytes(32);
-  // console.log({ seed });
-  // const node = bip32.fromSeed(seed, btc.networks.testnet);
-  const node = bip32.fromBase58(
-    "tprv8ZgxMBicQKsPdhNhSUGBbeSckFPQpAdPdZTPQ2JsFZwvQBiT7hwcUeJCFpfPHP9h3hVdABAN2p64eF8qthSqKrkqB4EQJ2vkSpWWujmQEbU", // just a seed test for local
-    btc.networks.testnet
-  );
+  const seed = crypto.randomBytes(32);
+  console.log({ seed });
+  const node = bip32.fromSeed(seed, btc.networks.bitcoin);
+  // const node = bip32.fromBase58(
+  //   "tprv8ZgxMBicQKsPdhNhSUGBbeSckFPQpAdPdZTPQ2JsFZwvQBiT7hwcUeJCFpfPHP9h3hVdABAN2p64eF8qthSqKrkqB4EQJ2vkSpWWujmQEbU", // just a seed test for local
+  //   btc.networks.testnet
+  // );
   // get extended pubkey here
   const xpriv = node.toBase58();
   const xpub = node.neutered().toBase58();
@@ -49,30 +53,42 @@ async function main(): Promise<void> {
   // console.log(depositAddress);
 
   // upload contract
-  // const cwBitcoinClient = new CwBitcoinClient(
-  //   client,
-  //   address,
-  //   "orai1plhnld6489hpxay9wfel8mp39esw625pnufq03p9tg0d8u60987s99l7z6"
-  // );
+  const cwBitcoinClient = new CwBitcoinClient(
+    client,
+    address,
+    "orai17lt09268d3t2yywa8yygqyng0p8r7865c2lplqjshzw0ngm2azuqllhklm"
+  );
 
   const cwLightClientBitcoin = new LightClientBitcoinClient(
     client,
     address,
-    "orai1unyuj8qnmygvzuex3dwmg9yzt9alhvyeat0uu0jedg2wj33efl5qjs222y"
+    "orai1rdykz2uuepxhkarar8ql5ajj5j37pq8h8d4zarvgx2s8pg0af37qucldna"
   );
 
   const cwAppBitcoinClient = new AppBitcoinClient(
     client,
     address,
-    "orai1xt4ahzz2x8hpkc0tk6ekte9x6crw4w6u0r67cyt3kz9syh24pd7sxfqs0x"
+    "orai12sxqkgsystjgd9faa48ghv3zmkfqc6qu05uy20mvv730vlzkpvls5zqxuz"
   );
 
   let tx;
 
+  // UPDATE WHITELIST
+  tx = await cwAppBitcoinClient.setWhitelistValidator({
+    permission: true,
+    valAddr: "orai1qv5jn7tueeqw7xqdn5rem7s09n7zletrsnc5vq",
+  });
+  console.log(tx.transactionHash);
+  tx = await cwAppBitcoinClient.setWhitelistValidator({
+    permission: true,
+    valAddr: "orai1q53ujvvrcd0t543dsh5445lu6ar0qr2z9ll7ux",
+  });
+  console.log(tx.transactionHash);
+
   // UPDATE CONFIG
   // tx = await cwAppBitcoinClient.updateConfig({
   //   tokenFee: {
-  //     nominator: 0,
+  //     nominator: 1,
   //     denominator: 1000,
   //   },
   // });
@@ -115,19 +131,19 @@ async function main(): Promise<void> {
   // console.log(await cwBitcoinClient.valueLocked());
 
   // CREATE DENOM
-  tx = await cwAppBitcoinClient.registerDenom(
-    {
-      subdenom: "obtc",
-    },
-    "auto",
-    "",
-    [coin("10000000", "orai")]
-  );
-  console.log(tx.transactionHash);
+  // tx = await cwAppBitcoinClient.registerDenom(
+  //   {
+  //     subdenom: "obtc",
+  //   },
+  //   "auto",
+  //   "",
+  //   [coin("10000000", "orai")]
+  // );
+  // console.log(tx.transactionHash);
 
   // CHANGE DENOM OWNER
-  // const tx = await cwBitcoinClient.changeBtcDenomOwner({
-  //   newOwner: "orai1ehmhqcn8erf3dgavrca69zgp4rtxj5kqgtcnyd",
+  // tx = await cwAppBitcoinClient.changeBtcDenomOwner({
+  //   newOwner: "orai1yzmjgpr08u7d9n9qqhvux9ckfgq32z77c04lkg",
   // });
   // console.log(tx.transactionHash);
 
@@ -135,25 +151,25 @@ async function main(): Promise<void> {
   // let tokenFactoryClient = new TokenfactoryClient(
   //   client,
   //   address,
-  //   "orai19g9xuqrvz2frv905v3fc7puryfypluhg383q9zwsmedrlqekfgyszk9yva"
+  //   "orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9"
   // );
-  // const tx = await tokenFactoryClient.burnTokens({
-  //   amount: "110584000000",
+  // tx = await tokenFactoryClient.burnTokens({
+  //   amount: "66424000000",
   //   burnFromAddress: "orai1ehmhqcn8erf3dgavrca69zgp4rtxj5kqgtcnyd",
   //   denom:
   //     "factory/orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9/obtc",
   // });
   // console.log(tx.transactionHash);
-  // const tx = await tokenFactoryClient.changeDenomOwner({
+  // tx = await tokenFactoryClient.changeDenomOwner({
   //   denom:
   //     "factory/orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9/obtc",
   //   newAdminAddress:
-  //     "orai1plhnld6489hpxay9wfel8mp39esw625pnufq03p9tg0d8u60987s99l7z6",
+  //     "orai12sxqkgsystjgd9faa48ghv3zmkfqc6qu05uy20mvv730vlzkpvls5zqxuz",
   // });
   // console.log(tx.transactionHash);
 
   // UPDATE CONFIG
-  // const tx = await cwBitcoinClient.updateConfig({
+  // tx = await cwBitcoinClient.updateConfig({
   //   tokenFee: {
   //     nominator: 1,
   //     denominator: 1000,
@@ -201,32 +217,32 @@ async function main(): Promise<void> {
   // console.log(tx.transactionHash);
 
   // testnet
-  tx = await cwLightClientBitcoin.updateHeaderConfig({
-    config: {
-      max_length: 24192,
-      max_time_increase: 2 * 60 * 60,
-      trusted_height: 2981664,
-      retarget_interval: 2016,
-      target_spacing: 10 * 60,
-      target_timespan: 2016 * (10 * 60),
-      max_target: 0x1d00ffff,
-      retargeting: true,
-      min_difficulty_blocks: true,
-      trusted_header: Buffer.from(
-        toBinaryBlockHeader({
-          version: 830308352,
-          prev_blockhash:
-            "000000000000083c1306d75a0c18b0942d0ad0aecb878e24c164a9caa3fb2ad3",
-          merkle_root:
-            "c170d6636e84b023bdb3128ba375de72d25e31db4f7049694bff7bbf0b463020",
-          time: 1726956958,
-          bits: 436469756,
-          nonce: 17918350,
-        })
-      ).toString("base64"),
-    },
-  });
-  console.log(tx.transactionHash);
+  // tx = await cwLightClientBitcoin.updateHeaderConfig({
+  //   config: {
+  //     max_length: 24192,
+  //     max_time_increase: 2 * 60 * 60,
+  //     trusted_height: 2981664,
+  //     retarget_interval: 2016,
+  //     target_spacing: 10 * 60,
+  //     target_timespan: 2016 * (10 * 60),
+  //     max_target: 0x1d00ffff,
+  //     retargeting: true,
+  //     min_difficulty_blocks: true,
+  //     trusted_header: Buffer.from(
+  //       toBinaryBlockHeader({
+  //         version: 830308352,
+  //         prev_blockhash:
+  //           "000000000000083c1306d75a0c18b0942d0ad0aecb878e24c164a9caa3fb2ad3",
+  //         merkle_root:
+  //           "c170d6636e84b023bdb3128ba375de72d25e31db4f7049694bff7bbf0b463020",
+  //         time: 1726956958,
+  //         bits: 436469756,
+  //         nonce: 17918350,
+  //       })
+  //     ).toString("base64"),
+  //   },
+  // });
+  // console.log(tx.transactionHash);
 }
 
 main().then(
