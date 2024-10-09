@@ -16,10 +16,10 @@ const contracts: Contract[] = [
     name: "cw_app_bitcoin",
     wasmFile: "./contracts/cw-app-bitcoin.wasm",
   },
-  // {
-  //   name: "token_factory",
-  //   wasmFile: "./contracts/tokenfactory.wasm",
-  // },
+  {
+    name: "token_factory",
+    wasmFile: "./contracts/tokenfactory.wasm",
+  },
 ];
 
 // Light client bitcoin: orai1unyuj8qnmygvzuex3dwmg9yzt9alhvyeat0uu0jedg2wj33efl5qjs222y
@@ -29,27 +29,27 @@ async function main(): Promise<void> {
   const mnemonic = getMnemonic();
 
   // get signing client
-  const { client, address } = await connect(mnemonic, OraichainConfig);
+  const { client, address } = await connect(mnemonic, WasmLocalConfig);
 
   // upload contract
   const codeId = await uploadContracts(client, address, contracts);
   const contractId = {
-    // tokenFactory: codeId.token_factory,
+    tokenFactory: codeId.token_factory,
     cwLightClientBitcoin: codeId.cw_light_client_bitcoin,
     cwAppBitcoin: codeId.cw_app_bitcoin,
   };
 
-  // const tokenFactoryMsg: TfInstantiateMsg = {};
-  // const tokenFactoryContract = await client.instantiate(
-  //   address,
-  //   contractId.tokenFactory,
-  //   tokenFactoryMsg,
-  //   "bitcoin app contract",
-  //   "auto",
-  //   {
-  //     admin: address,
-  //   }
-  // );
+  const tokenFactoryMsg: TfInstantiateMsg = {};
+  const tokenFactoryContract = await client.instantiate(
+    address,
+    contractId.tokenFactory,
+    tokenFactoryMsg,
+    "bitcoin app contract",
+    "auto",
+    {
+      admin: address,
+    }
+  );
 
   const lightClientMsg: LightClientInstantiateMsg = {};
   const lightClientContract = await client.instantiate(
@@ -65,8 +65,7 @@ async function main(): Promise<void> {
 
   const appMsg: AppInstantiateMsg = {
     light_client_contract: lightClientContract.contractAddress,
-    token_factory_contract:
-      "orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9",
+    token_factory_contract: tokenFactoryContract.contractAddress,
     relayer_fee: "0",
     relayer_fee_receiver: "orai1yzmjgpr08u7d9n9qqhvux9ckfgq32z77c04lkg",
     relayer_fee_token: {
@@ -75,8 +74,7 @@ async function main(): Promise<void> {
       },
     },
     token_fee_receiver: "orai1yzmjgpr08u7d9n9qqhvux9ckfgq32z77c04lkg",
-    osor_entry_point_contract:
-      "orai1yglsm0u2x3xmct9kq3lxa654cshaxj9j5d9rw5enemkkkdjgzj7sr3gwt0",
+    osor_entry_point_contract: "orai1yzmjgpr08u7d9n9qqhvux9ckfgq32z77c04lkg",
   };
 
   const appContract = await client.instantiate(

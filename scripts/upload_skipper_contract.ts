@@ -17,8 +17,8 @@ const contracts: Contract[] = [
   },
 ];
 
-// entry point: orai153r9tg33had5c5s54sqzn879xww2q2egektyqnpj6nwxt8wls70qm693vr
-// ibc hook: orai1f6jlx7d9y408tlzue7r2qcf79plp549n30yzqjajjud8vm7m4vdsgul657
+// Entrypoint contract: orai14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9savsjyw
+// Ibchook contract orai1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrq3e4sxg
 async function main(): Promise<void> {
   // get the mnemonic
   const mnemonic = getMnemonic();
