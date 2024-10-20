@@ -13,10 +13,10 @@ async function main(): Promise<void> {
 
   const tx = client.sendTokens(
     address,
-    "orai1hvr9d72r5um9lvt0rpkd4r75vrsqtw6yujhqs2",
+    "orai1mycmhyrmd6dusp408rtjgzlk7738vhtgqyhxxt",
     [
       coin(
-        10900000000,
+        10352312000,
         "factory/orai1wuvhex9xqs3r539mvc6mtm7n20fcj3qr2m0y9khx6n5vtlngfzes3k0rq9/obtc"
       ),
     ],

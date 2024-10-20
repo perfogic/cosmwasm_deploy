@@ -29,7 +29,7 @@ async function main(): Promise<void> {
   const mnemonic = getMnemonic();
 
   // get signing client
-  const { client, address } = await connect(mnemonic, WasmLocalConfig);
+  const { client, address } = await connect(mnemonic, OraichainConfig);
 
   const bip32 = BIP32Factory(ecc);
   const seed = crypto.randomBytes(32);
@@ -56,32 +56,52 @@ async function main(): Promise<void> {
   const cwLightClientBitcoin = new LightClientBitcoinClient(
     client,
     address,
-    "orai1suhgf5svhu4usrurvxzlgn54ksxmn8gljarjtxqnapv8kjnp4nrszeu8v8"
+    "orai1rdykz2uuepxhkarar8ql5ajj5j37pq8h8d4zarvgx2s8pg0af37qucldna"
   );
 
   const cwAppBitcoinClient = new AppBitcoinClient(
     client,
     address,
-    "orai1xr3rq8yvd7qplsw5yx90ftsr2zdhg4e9z60h5duusgxpv72hud3sa76vg2"
+    "orai12sxqkgsystjgd9faa48ghv3zmkfqc6qu05uy20mvv730vlzkpvls5zqxuz"
   );
 
   let tx;
 
   // UPDATE CONFIG
-  tx = await cwAppBitcoinClient.updateConfig({
-    tokenFee: {
-      nominator: 1,
-      denominator: 1000,
-    },
-  });
+  // tx = await cwAppBitcoinClient.updateConfig({
+  // tokenFee: {
+  //   nominator: 0,
+  //   denominator: 1000,
+  // },
+  //   tokenFeeReceiver: "orai1a5cec5y3l42ztxrfnu7qmerscj8ulggyrr96a8",
+  //   relayerFeeReceiver: "orai1a5cec5y3l42ztxrfnu7qmerscj8ulggyrr96a8",
+  // });
+  // console.log(tx.transactionHash);
+
+  // console.log(await cwAppBitcoinClient.config());
+
+  tx = await client.updateAdmin(
+    address,
+    "orai12sxqkgsystjgd9faa48ghv3zmkfqc6qu05uy20mvv730vlzkpvls5zqxuz",
+    "orai1wn0qfdhn7xfn7fvsx6fme96x4mcuzrm9wm3mvlunp5e737rpgt4qndmfv8",
+    "auto"
+  );
+  console.log(tx.transactionHash);
+
+  tx = await client.updateAdmin(
+    address,
+    "orai1rdykz2uuepxhkarar8ql5ajj5j37pq8h8d4zarvgx2s8pg0af37qucldna",
+    "orai1wn0qfdhn7xfn7fvsx6fme96x4mcuzrm9wm3mvlunp5e737rpgt4qndmfv8",
+    "auto"
+  );
   console.log(tx.transactionHash);
 
   // UPDATE WHITELIST
-  tx = await cwAppBitcoinClient.setWhitelistValidator({
-    permission: true,
-    valAddr: address,
-  });
-  console.log(tx.transactionHash);
+  // tx = await cwAppBitcoinClient.setWhitelistValidator({
+  //   permission: true,
+  //   valAddr: "orai1ltr3sx9vm9hq4ueajvs7ng24gw3k8t9t67y73h",
+  // });
+  // console.log(tx.transactionHash);
   // tx = await cwAppBitcoinClient.setWhitelistValidator({
   //   permission: true,
   //   valAddr: "orai1q53ujvvrcd0t543dsh5445lu6ar0qr2z9ll7ux",
@@ -125,15 +145,15 @@ async function main(): Promise<void> {
   // console.log(await cwBitcoinClient.valueLocked());
 
   // CREATE DENOM
-  tx = await cwAppBitcoinClient.registerDenom(
-    {
-      subdenom: "obtc",
-    },
-    "auto",
-    "",
-    [coin("10000000", "orai")]
-  );
-  console.log(tx.transactionHash);
+  // tx = await cwAppBitcoinClient.registerDenom(
+  //   {
+  //     subdenom: "obtc",
+  //   },
+  //   "auto",
+  //   "",
+  //   [coin("10000000", "orai")]
+  // );
+  // console.log(tx.transactionHash);
 
   // CHANGE DENOM OWNER
   // tx = await cwAppBitcoinClient.changeBtcDenomOwner({
@@ -211,32 +231,32 @@ async function main(): Promise<void> {
   // console.log(tx.transactionHash);
 
   // testnet
-  tx = await cwLightClientBitcoin.updateHeaderConfig({
-    config: {
-      max_length: 24192,
-      max_time_increase: 2 * 60 * 60,
-      trusted_height: 2981664,
-      retarget_interval: 2016,
-      target_spacing: 10 * 60,
-      target_timespan: 2016 * (10 * 60),
-      max_target: 0x1d00ffff,
-      retargeting: true,
-      min_difficulty_blocks: true,
-      trusted_header: Buffer.from(
-        toBinaryBlockHeader({
-          version: 830308352,
-          prev_blockhash:
-            "000000000000083c1306d75a0c18b0942d0ad0aecb878e24c164a9caa3fb2ad3",
-          merkle_root:
-            "c170d6636e84b023bdb3128ba375de72d25e31db4f7049694bff7bbf0b463020",
-          time: 1726956958,
-          bits: 436469756,
-          nonce: 17918350,
-        })
-      ).toString("base64"),
-    },
-  });
-  console.log(tx.transactionHash);
+  // tx = await cwLightClientBitcoin.updateHeaderConfig({
+  //   config: {
+  //     max_length: 24192,
+  //     max_time_increase: 2 * 60 * 60,
+  //     trusted_height: 2981664,
+  //     retarget_interval: 2016,
+  //     target_spacing: 10 * 60,
+  //     target_timespan: 2016 * (10 * 60),
+  //     max_target: 0x1d00ffff,
+  //     retargeting: true,
+  //     min_difficulty_blocks: true,
+  //     trusted_header: Buffer.from(
+  //       toBinaryBlockHeader({
+  //         version: 830308352,
+  //         prev_blockhash:
+  //           "000000000000083c1306d75a0c18b0942d0ad0aecb878e24c164a9caa3fb2ad3",
+  //         merkle_root:
+  //           "c170d6636e84b023bdb3128ba375de72d25e31db4f7049694bff7bbf0b463020",
+  //         time: 1726956958,
+  //         bits: 436469756,
+  //         nonce: 17918350,
+  //       })
+  //     ).toString("base64"),
+  //   },
+  // });
+  // console.log(tx.transactionHash);
 }
 
 main().then(
