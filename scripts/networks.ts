@@ -28,6 +28,15 @@ export const OraichainConfig: Network = {
   faucetUrl: "https://faucet.orai.io/",
 };
 
+export const OraichainTestnetConfig: Network = {
+  chainId: "Oraichain-fork",
+  rpcEndpoint: "https://testnet-v2.rpc.orai.io/",
+  prefix: "orai",
+  gasPrice: GasPrice.fromString("0.002orai"),
+  feeToken: "orai",
+  faucetUrl: "",
+};
+
 export const JunoConfig: Network = {
   chainId: "uni-6",
   rpcEndpoint: "https://rpc.testnet.osmosis.zone",
