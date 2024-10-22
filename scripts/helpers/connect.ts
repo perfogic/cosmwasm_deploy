@@ -9,7 +9,7 @@ import {
 } from "@cosmjs/proto-signing";
 import { Secp256k1HdWallet, makeCosmoshubPath } from "@cosmjs/amino";
 
-import { Network } from "../networks";
+import { Network } from "../constants/networks";
 import { PrivateKey } from "@injectivelabs/sdk-ts";
 import { AminoTypes } from "@cosmjs/stargate";
 

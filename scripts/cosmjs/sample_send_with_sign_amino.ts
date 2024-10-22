@@ -1,8 +1,11 @@
-import { getMnemonic } from "./helpers/utils";
-import { connect } from "./helpers/connect";
-import { OraiBtcMainnetConfig } from "./networks";
+import { getMnemonic } from "../helpers/utils";
+import { connect } from "../helpers/connect";
+import {
+  OraiBtcMainnetConfig,
+  OraiBtcSubnetConfig,
+} from "../constants/networks";
 import { coin, StdFee } from "@cosmjs/amino";
-import "dotenv/config";
+// import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import axios from "axios";
 
@@ -10,13 +13,16 @@ async function main(): Promise<void> {
   // get the mnemonic
   const mnemonic = getMnemonic();
 
-  const { client, address } = await connect(mnemonic, OraiBtcMainnetConfig);
-
-  console.log(address);
-  const res = await axios.get(
-    `https://btc.lcd.orai.io/auth/accounts/${address}`
+  const { client, address } = await connect(
+    mnemonic,
+    OraiBtcMainnetConfig,
+    false
   );
-  const sequence = res.data.result.value.sequence;
+
+  const res = await fetch(
+    `https://btc.lcd.orai.io/auth/accounts/${address}`
+  ).then((res) => res.json());
+  const sequence = res.result.value.sequence;
 
   const sendMsg1 = {
     typeUrl: "/cosmos.bank.v1beta1.MsgSend",
@@ -46,7 +52,7 @@ async function main(): Promise<void> {
     {
       accountNumber: 0,
       chainId: OraiBtcMainnetConfig.chainId,
-      sequence,
+      sequence: sequence,
     }
   );
   const txBytes = TxRaw.encode(txRaw).finish();

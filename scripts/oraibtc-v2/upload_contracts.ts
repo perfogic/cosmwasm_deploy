@@ -1,10 +1,10 @@
-import { Contract, getMnemonic, loadContract } from "./helpers/utils";
-import { connect } from "./helpers/connect";
-import { uploadContracts } from "./helpers/contract";
-import { InstantiateMsg as AppInstantiateMsg } from "../bindings/AppBitcoin.types";
-import { InstantiateMsg as LightClientInstantiateMsg } from "../bindings/LightClientBitcoin.types";
-import { InstantiateMsg as TfInstantiateMsg } from "../bindings/Tokenfactory.types";
-import { OraichainConfig, WasmLocalConfig } from "./networks";
+import { Contract, getMnemonic, loadContract } from "../helpers/utils";
+import { connect } from "../helpers/connect";
+import { uploadContracts } from "../helpers/contract";
+import { InstantiateMsg as AppInstantiateMsg } from "../../bindings/AppBitcoin.types";
+import { InstantiateMsg as LightClientInstantiateMsg } from "../../bindings/LightClientBitcoin.types";
+import { InstantiateMsg as TfInstantiateMsg } from "../../bindings/Tokenfactory.types";
+import { OraichainConfig, WasmLocalConfig } from "../constants/networks";
 
 // cw bitcoin mainnet: orai18ffp5mu06pg55q9lj5hgkadtzadwfye4jl2pgfskuca84w7dcqjsezlqk2
 const contracts: Contract[] = [

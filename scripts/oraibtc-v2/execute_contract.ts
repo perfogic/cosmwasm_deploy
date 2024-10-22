@@ -1,6 +1,6 @@
-import { getMnemonic } from "./helpers/utils";
-import { connect } from "./helpers/connect";
-import { OraichainConfig, OraiBtcLocalConfig } from "./networks";
+import { getMnemonic } from "../helpers/utils";
+import { connect } from "../helpers/connect";
+import { OraichainConfig, OraiBtcLocalConfig } from "../constants/networks";
 import Long from "long";
 import { fromBech32, toBech32 } from "@cosmjs/encoding";
 import { coin } from "@cosmjs/stargate";

@@ -1,6 +1,9 @@
-import { getMnemonic } from "./helpers/utils";
-import { connect } from "./helpers/connect";
-import { OraiBtcLocalConfig, OraiBtcMainnetConfig } from "./networks";
+import { getMnemonic } from "../helpers/utils";
+import { connect } from "../helpers/connect";
+import {
+  OraiBtcLocalConfig,
+  OraiBtcMainnetConfig,
+} from "../constants/networks";
 import { AminoMsg, coin, makeStdTx, StdFee } from "@cosmjs/amino";
 import { Type, Field } from "protobufjs";
 import {

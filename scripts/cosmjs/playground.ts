@@ -1,6 +1,6 @@
-import { connect } from "./helpers/connect";
-import { getMnemonic } from "./helpers/utils";
-import { OraichainConfig } from "./networks";
+import { connect } from "../helpers/connect";
+import { getMnemonic } from "../helpers/utils";
+import { OraichainConfig } from "../constants/networks";
 
 const main = async () => {
   // get the mnemonic

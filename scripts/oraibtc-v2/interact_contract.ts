@@ -1,12 +1,12 @@
-import { Contract, getMnemonic, loadContract } from "./helpers/utils";
-import { connect } from "./helpers/connect";
-import { uploadContracts } from "./helpers/contract";
-import { OraichainConfig, WasmLocalConfig } from "./networks";
+import { Contract, getMnemonic, loadContract } from "../helpers/utils";
+import { connect } from "../helpers/connect";
+import { uploadContracts } from "../helpers/contract";
+import { OraichainConfig, WasmLocalConfig } from "../constants/networks";
 import {
   AppBitcoinClient,
   CwBitcoinClient,
   LightClientBitcoinClient,
-} from "../bindings";
+} from "../../bindings";
 import {
   fromBase64Script,
   fromBinaryScript,
@@ -19,7 +19,7 @@ import * as btc from "bitcoinjs-lib";
 import { generateDepositAddress } from "@oraichain/bitcoin-bridge-lib-js";
 import { coin } from "@cosmjs/stargate";
 import crypto, { createHash } from "crypto";
-import { TokenfactoryClient } from "../bindings";
+import { TokenfactoryClient } from "../../bindings";
 import { fromBech32, toBech32 } from "@cosmjs/encoding";
 
 // mainnet: orai1plhnld6489hpxay9wfel8mp39esw625pnufq03p9tg0d8u60987s99l7z6

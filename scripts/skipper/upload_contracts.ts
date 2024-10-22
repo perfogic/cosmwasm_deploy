@@ -1,10 +1,10 @@
-import { Contract, getMnemonic, loadContract } from "./helpers/utils";
-import { connect } from "./helpers/connect";
-import { uploadContracts } from "./helpers/contract";
-import { InstantiateMsg as epInstantiateMsg } from "../bindings/EntryPoint.types";
-import { InstantiateMsg as ihInstantiateMsg } from "../bindings/IbcHooks.types";
-import { WasmLocalConfig } from "./networks";
-import { EntryPointClient } from "../bindings";
+import { Contract, getMnemonic, loadContract } from "../helpers/utils";
+import { connect } from "../helpers/connect";
+import { uploadContracts } from "../helpers/contract";
+import { InstantiateMsg as epInstantiateMsg } from "../../bindings/EntryPoint.types";
+import { InstantiateMsg as ihInstantiateMsg } from "../../bindings/IbcHooks.types";
+import { WasmLocalConfig } from "../constants/networks";
+import { EntryPointClient } from "../../bindings";
 
 const contracts: Contract[] = [
   {

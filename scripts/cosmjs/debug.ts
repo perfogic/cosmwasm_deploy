@@ -1,6 +1,9 @@
-import { getMnemonic } from "./helpers/utils";
-import { connect } from "./helpers/connect";
-import { OraiBtcMainnetConfig, OraiBtcSubnetConfig } from "./networks";
+import { getMnemonic } from "../helpers/utils";
+import { connect } from "../helpers/connect";
+import {
+  OraiBtcMainnetConfig,
+  OraiBtcSubnetConfig,
+} from "../constants/networks";
 import { coin, StdFee } from "@cosmjs/amino";
 // import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
@@ -11,9 +14,9 @@ import { BinaryWriter, BinaryReader } from "cosmjs-types/binary";
 import { isSet } from "util/types";
 
 interface MsgSendOraiBtc {
-  from_address: string,
-  to_address: string,
-  amount: Coin[],
+  from_address: string;
+  to_address: string;
+  amount: Coin[];
 }
 
 function createBaseMsgSend(): MsgSendOraiBtc {
@@ -25,7 +28,10 @@ function createBaseMsgSend(): MsgSendOraiBtc {
 }
 export const MsgSendOraiBtc = {
   typeUrl: "cosmos-sdk/MsgSend",
-  encode(message: MsgSendOraiBtc, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+  encode(
+    message: MsgSendOraiBtc,
+    writer: BinaryWriter = BinaryWriter.create()
+  ): BinaryWriter {
     if (message.from_address !== "") {
       writer.uint32(10).string(message.from_address);
     }
@@ -38,7 +44,8 @@ export const MsgSendOraiBtc = {
     return writer;
   },
   decode(input: BinaryReader | Uint8Array, length?: number): MsgSendOraiBtc {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader =
+      input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgSend();
     while (reader.pos < end) {
@@ -62,14 +69,17 @@ export const MsgSendOraiBtc = {
   },
   fromJSON(object: any): MsgSendOraiBtc {
     const obj = createBaseMsgSend();
-    if (isSet(object.from_address)) obj.from_address = String(object.from_address);
+    if (isSet(object.from_address))
+      obj.from_address = String(object.from_address);
     if (isSet(object.to_address)) obj.to_address = String(object.to_address);
-    if (Array.isArray(object?.amount)) obj.amount = object.amount.map((e: any) => Coin.fromJSON(e));
+    if (Array.isArray(object?.amount))
+      obj.amount = object.amount.map((e: any) => Coin.fromJSON(e));
     return obj;
   },
   toJSON(message: MsgSendOraiBtc): unknown {
     const obj: any = {};
-    message.from_address !== undefined && (obj.from_address = message.from_address);
+    message.from_address !== undefined &&
+      (obj.from_address = message.from_address);
     message.to_address !== undefined && (obj.to_address = message.to_address);
     if (message.amount) {
       obj.amount = message.amount.map((e) => (e ? Coin.toJSON(e) : undefined));
@@ -98,16 +108,18 @@ async function main(): Promise<void> {
     value: {
       from_address: address,
       to_address: "oraibtc1rchnkdpsxzhquu63y6r4j4t57pnc9w8ea88hue",
-      amount: [{
-        denom: OraiBtcMainnetConfig.feeToken,
-        amount: "350000000",
-      }],
+      amount: [
+        {
+          denom: OraiBtcMainnetConfig.feeToken,
+          amount: "350000000",
+        },
+      ],
     },
   };
-  
-  client.registry.register("cosmos-sdk/MsgSend", MsgSendOraiBtc)
 
-  console.log(sendMsg, MsgSendOraiBtc.encode(sendMsg.value).finish())
+  client.registry.register("cosmos-sdk/MsgSend", MsgSendOraiBtc);
+
+  console.log(sendMsg, MsgSendOraiBtc.encode(sendMsg.value).finish());
   const txRaw = await client.sign(
     address,
     [sendMsg],
@@ -119,12 +131,12 @@ async function main(): Promise<void> {
     {
       accountNumber: 0,
       chainId: OraiBtcSubnetConfig.chainId,
-      sequence: 2
+      sequence: 2,
     }
   );
-  const txBytes = TxRaw.encode(txRaw).finish()
-  const txData = await client.broadcastTx(txBytes)
-  console.log(txData)
+  const txBytes = TxRaw.encode(txRaw).finish();
+  const txData = await client.broadcastTx(txBytes);
+  console.log(txData);
 }
 
 main().then(

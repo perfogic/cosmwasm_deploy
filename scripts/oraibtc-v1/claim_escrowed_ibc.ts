@@ -1,10 +1,10 @@
-import { getMnemonic } from "./helpers/utils";
-import { connect } from "./helpers/connect";
+import { getMnemonic } from "../helpers/utils";
+import { connect } from "../helpers/connect";
 import {
   OraiBtcLocalConfig,
   OraiBtcMainnetConfig,
   OraiBtcSubnetConfig,
-} from "./networks";
+} from "../constants/networks";
 import { coin, StdFee } from "@cosmjs/amino";
 // import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
 import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";

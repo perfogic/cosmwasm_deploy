@@ -1,9 +1,9 @@
-import { Contract, getMnemonic, loadContract } from "./helpers/utils";
-import { connect } from "./helpers/connect";
-import { uploadContracts } from "./helpers/contract";
-import { InstantiateMsg } from "../bindings/CwBitcoin.types";
-import { OraichainConfig, WasmLocalConfig } from "./networks";
-import { Cw20Coin } from "../bindings/Cw20.types";
+import { Contract, getMnemonic, loadContract } from "../helpers/utils";
+import { connect } from "../helpers/connect";
+import { uploadContracts } from "../helpers/contract";
+import { InstantiateMsg } from "../../bindings/CwBitcoin.types";
+import { OraichainConfig, WasmLocalConfig } from "../constants/networks";
+import { Cw20Coin } from "../../bindings/Cw20.types";
 
 const contracts: Contract[] = [
   // {
