@@ -12,7 +12,7 @@ async function main(): Promise<void> {
   // get the mnemonic
   const mnemonic = getMnemonic();
 
-  const { client, address } = await connect(mnemonic, OraichainConfig, true);
+  const { client, address } = await connect(mnemonic, OraichainConfig, false);
   const message = Cosmos.message;
 
   const createProposal = new message.cosmwasm.wasm.v1.UpdateAdminProposal({

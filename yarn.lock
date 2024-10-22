@@ -1499,7 +1499,7 @@
   resolved "https://registry.yarnpkg.com/@oraichain/bitcoin-bridge-wasm-sdk/-/bitcoin-bridge-wasm-sdk-1.0.10.tgz#121e1e82bc10bfa5af06db068ff59c0b5f8e501d"
   integrity sha512-lA0Eh1X4YxVa2pMZNrY9GKumBCINA4kK8Sintjrq7ugG+3lltb5of6iAvGUHWpUTJjRK4xCcoG5oq3QIOTd26g==
 
-"@oraichain/cosmosjs@^0.1.10":
+"@oraichain/cosmosjs@0.1.10":
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/@oraichain/cosmosjs/-/cosmosjs-0.1.10.tgz#86eeb9a25bde39c324111be01f2b220785f8aade"
   integrity sha512-VeIiYhMnLxou90E8HfK+QhB3EPrj+y8k5HzmGCwR8P61vxYYGnB413L3fAbL+trznqSXdLxzwRn+P1gXcqCDvg==
