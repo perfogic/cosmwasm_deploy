@@ -1,20 +1,20 @@
 import { connect } from "../helpers/connect";
 import { getMnemonic } from "../helpers/utils";
-import { OraichainConfig } from "../constants/networks";
+import { OraichainTestnetConfig } from "../constants/networks";
 
 const main = async () => {
   // get the mnemonic
   const mnemonic = getMnemonic();
 
   // get signing client
-  const { client, address } = await connect(mnemonic, OraichainConfig);
+  const { client, address } = await connect(mnemonic, OraichainTestnetConfig);
 
   const tx = await client.sendTokens(
     address,
-    "orai1mycmhyrmd6dusp408rtjgzlk7738vhtgqyhxxt",
+    "orai1v8r49hecvev8kskwjndskfymz5uk4e5c83xucu",
     [
       {
-        amount: "100000000",
+        amount: "2000000",
         denom: "orai",
       },
     ],
