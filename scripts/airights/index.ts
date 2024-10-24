@@ -5,10 +5,26 @@ import { OraichainTestnetConfig } from "../constants/networks";
 
 // cw bitcoin mainnet: orai18ffp5mu06pg55q9lj5hgkadtzadwfye4jl2pgfskuca84w7dcqjsezlqk2
 const contracts: Contract[] = [
+  // {
+  //   name: "oraichain_nft",
+  //   wasmFile: "./contracts/oraichain_nft.wasm",
+  // },
   {
-    name: "oraichain_nft",
-    wasmFile: "./contracts/oraichain_nft.wasm",
+    name: "marketplace",
+    wasmFile: "./contracts/marketplace.wasm",
   },
+  // {
+  //   name: "locked_ow721",
+  //   wasmFile: "./contracts/locked_ow721.wasm",
+  // },
+  // {
+  //   name: "market_nft_staking",
+  //   wasmFile: "./contracts/market_nft_staking.wasm",
+  // },
+  // {
+  //   name: "market_payment_storage",
+  //   wasmFile: "./contracts/market_payment_storage.wasm",
+  // },
 ];
 
 async function main(): Promise<void> {
@@ -21,7 +37,7 @@ async function main(): Promise<void> {
   // upload contract
   const codeId = await uploadContracts(client, address, contracts);
   const contractId = {
-    oraichainNft: codeId.oraichain_nft,
+    marketplace: codeId.marketplace,
   };
   console.log(contractId);
 }
