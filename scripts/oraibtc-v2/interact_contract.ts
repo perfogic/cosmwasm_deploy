@@ -65,6 +65,8 @@ async function main(): Promise<void> {
     "orai12sxqkgsystjgd9faa48ghv3zmkfqc6qu05uy20mvv730vlzkpvls5zqxuz"
   );
 
+  console.log("Building index:", await cwAppBitcoinClient.buildingIndex());
+
   let tx;
 
   // UPDATE CONFIG
@@ -80,21 +82,21 @@ async function main(): Promise<void> {
 
   // console.log(await cwAppBitcoinClient.config());
 
-  tx = await client.updateAdmin(
-    address,
-    "orai12sxqkgsystjgd9faa48ghv3zmkfqc6qu05uy20mvv730vlzkpvls5zqxuz",
-    "orai1wn0qfdhn7xfn7fvsx6fme96x4mcuzrm9wm3mvlunp5e737rpgt4qndmfv8",
-    "auto"
-  );
-  console.log(tx.transactionHash);
+  // tx = await client.updateAdmin(
+  //   address,
+  //   "orai12sxqkgsystjgd9faa48ghv3zmkfqc6qu05uy20mvv730vlzkpvls5zqxuz",
+  //   "orai1wn0qfdhn7xfn7fvsx6fme96x4mcuzrm9wm3mvlunp5e737rpgt4qndmfv8",
+  //   "auto"
+  // );
+  // console.log(tx.transactionHash);
 
-  tx = await client.updateAdmin(
-    address,
-    "orai1rdykz2uuepxhkarar8ql5ajj5j37pq8h8d4zarvgx2s8pg0af37qucldna",
-    "orai1wn0qfdhn7xfn7fvsx6fme96x4mcuzrm9wm3mvlunp5e737rpgt4qndmfv8",
-    "auto"
-  );
-  console.log(tx.transactionHash);
+  // tx = await client.updateAdmin(
+  //   address,
+  //   "orai1rdykz2uuepxhkarar8ql5ajj5j37pq8h8d4zarvgx2s8pg0af37qucldna",
+  //   "orai1wn0qfdhn7xfn7fvsx6fme96x4mcuzrm9wm3mvlunp5e737rpgt4qndmfv8",
+  //   "auto"
+  // );
+  // console.log(tx.transactionHash);
 
   // UPDATE WHITELIST
   // tx = await cwAppBitcoinClient.setWhitelistValidator({
