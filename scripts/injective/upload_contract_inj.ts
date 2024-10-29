@@ -1,8 +1,8 @@
-import { Contract, getMnemonic } from "./helpers/utils";
-import { connectINJ } from "./helpers/connect";
-import { Cw20Coin, InstantiateMsg } from "../bindings/Cw20.types";
+import { Contract, getMnemonic } from "../helpers/utils";
+import { connectINJ } from "../helpers/connect";
+import { Cw20Coin, InstantiateMsg } from "../../bindings/Cw20.types";
 import { Network, getNetworkInfo } from "@injectivelabs/networks";
-import { executeTransaction, uploadContractsInj } from "./helpers/contract";
+import { executeTransaction, uploadContractsInj } from "../helpers/contract";
 import { MsgInstantiateContract } from "@injectivelabs/sdk-ts";
 
 const contracts: Contract[] = [

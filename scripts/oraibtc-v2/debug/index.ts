@@ -18,14 +18,10 @@ const start = async () => {
   // console.log(getBitcoinTransactionTxid(tx));
   // console.log({ tx });
 
-  const data = await cosmwasm.queryContractSmart(
-    "orai12sxqkgsystjgd9faa48ghv3zmkfqc6qu05uy20mvv730vlzkpvls5zqxuz",
-    {
-      checkpoint_by_index: {
-        index: 13,
-      },
-    }
-  );
+  // const data = await cosmwasm.queryContractRaw(
+  //   "orai12sxqkgsystjgd9faa48ghv3zmkfqc6qu05uy20mvv730vlzkpvls5zqxuz",
+  //   new Uint8Array(Buffer.concat())
+  // );
 
   // const cp = await cosmwasm.queryContractSmart(
   //   "orai12sxqkgsystjgd9faa48ghv3zmkfqc6qu05uy20mvv730vlzkpvls5zqxuz",

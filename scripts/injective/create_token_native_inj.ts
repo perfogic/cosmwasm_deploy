@@ -1,5 +1,5 @@
-import { getMnemonic } from "./helpers/utils";
-import { connectINJ } from "./helpers/connect";
+import { getMnemonic } from "../helpers/utils";
+import { connectINJ } from "../helpers/connect";
 import { Network, getNetworkInfo } from "@injectivelabs/networks";
 
 import {
@@ -7,7 +7,7 @@ import {
   MsgSetDenomMetadata,
   MsgMint,
 } from "@injectivelabs/sdk-ts";
-import { executeTransaction } from "./helpers/contract";
+import { executeTransaction } from "../helpers/contract";
 
 async function main(): Promise<void> {
   // get the mnemonic
