@@ -72,6 +72,7 @@ const main = async () => {
     network: network,
   });
   console.log("Address:", p2wshInP2sh.address);
+  console.log("Name:", p2wshInP2sh.name);
 
   let prevOutAmount = 1000000;
   let tx = new btc.Transaction();
