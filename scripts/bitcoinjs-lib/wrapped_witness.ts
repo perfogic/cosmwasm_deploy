@@ -63,15 +63,15 @@ const main = async () => {
     [2, 3]
   );
 
-  // const p2wsh = btc.payments.p2wsh({
-  //   redeem: { output: redeem, network: network },
-  //   network: network,
-  // });
-  // const p2wshInP2sh = btc.payments.p2sh({
-  //   redeem: p2wsh,
-  //   network: network,
-  // });
-  // console.log("Address:", p2wshInP2sh.address);
+  const p2wsh = btc.payments.p2wsh({
+    redeem: { output: redeem, network: network },
+    network: network,
+  });
+  const p2wshInP2sh = btc.payments.p2sh({
+    redeem: p2wsh,
+    network: network,
+  });
+  console.log("Address:", p2wshInP2sh.address);
 
   let prevOutAmount = 1000000;
   let tx = new btc.Transaction();
