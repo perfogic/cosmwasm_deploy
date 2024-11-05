@@ -1,3 +1,4 @@
+import { BigDecimal } from "@oraichain/oraidex-common";
 import { Cw20Client } from "../../../bindings";
 import { OraichainConfig } from "../../constants/networks";
 import { connect } from "../../helpers/connect";
@@ -25,22 +26,31 @@ const getAllAccounts = async () => {
     allAccounts.map((account) => cw20Contract.balance({ address: account }))
   );
 
-  let total = allBalances
-    .filter(
-      (balance) =>
-        BigInt(balance.balance) > 0n && BigInt(balance.balance) <= 100000n
-    )
-    .reduce((acc, balance) => acc + BigInt(balance.balance), 0n);
-
-  console.log({ total });
-  // let snapshotAccounts = [];
-  // for (let i = 0; i < allAccounts.length; i++) {
-  //   if (BigInt(allBalances[i].balance) > 0n) {
-  //     snapshotAccounts.push(allAccounts[i]);
-  //     console.log(allAccounts[i], allBalances[i]);
-  //   }
-  // }
-  // console.log({ snapshotAccounts });
+  let snapshotAccounts = [];
+  let total = 0n;
+  for (let i = 0; i < allAccounts.length; i++) {
+    if (
+      BigInt(allBalances[i].balance) > 0n &&
+      BigInt(allBalances[i].balance) < 28000000n
+    ) {
+      snapshotAccounts.push(allAccounts[i]);
+      total += BigInt(allBalances[i].balance);
+      console.log(
+        allAccounts[i],
+        // "- Raw amount: ",
+        // BigInt(allBalances[i].balance) * 10n ** 8n, // Cast to bigint
+        "- BTC amount: ",
+        new BigDecimal(BigInt(allBalances[i].balance) * 10n ** 8n)
+          .div(new BigDecimal(10n ** 14n))
+          .toString(),
+        "BTC"
+      );
+    }
+  }
+  console.log(
+    "Total amount",
+    new BigDecimal(total).div(new BigDecimal(10n ** 6n)).toString()
+  );
 };
 
 getAllAccounts();
