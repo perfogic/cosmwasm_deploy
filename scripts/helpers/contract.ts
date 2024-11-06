@@ -29,13 +29,14 @@ interface UploadResults {
 export async function uploadContracts(
   client: SigningCosmWasmClient,
   signer: string,
-  contracts: Contract[]
+  contracts: Contract[],
+  memo: string = ""
 ): Promise<UploadResults> {
   const uploaded: UploadResults = {};
   for (const contract of contracts) {
     const wasm = await loadContract(contract);
     console.debug(`Uploading ${contract.name}...`);
-    const receipt = await client.upload(signer, wasm, "auto");
+    const receipt = await client.upload(signer, wasm, "auto", memo);
 
     uploaded[contract.name] = receipt.codeId;
     console.log(`Uploaded ${contract.name} with code id ${receipt.codeId}`);
