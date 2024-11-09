@@ -1,15 +1,10 @@
 import * as btc from "bitcoinjs-lib";
-import { BitcoinNetwork, redeemScript } from "@oraichain/bitcoin-bridge-lib-js";
-import {
-  commitmentBytes,
-  encodeXpub,
-} from "@oraichain/bitcoin-bridge-wasm-sdk";
+import { redeemScript } from "@oraichain/bitcoin-bridge-lib-js";
+import { commitmentBytes } from "@oraichain/bitcoin-bridge-wasm-sdk";
 import * as dogecoin from "@unielon/coin-dogecoin";
 import BIP32Factory from "bip32";
-import crypto from "crypto";
 import * as ecc from "tiny-secp256k1";
-import { witnessStackToScriptWitness } from "./witness_stack_to_script_witness";
-import { broadcast } from "./blockstream_utils";
+
 const main = async () => {
   let network = dogecoin.dogeCoin;
   const bip32 = BIP32Factory(ecc);

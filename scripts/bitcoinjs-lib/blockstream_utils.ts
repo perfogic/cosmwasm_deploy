@@ -4,10 +4,6 @@ const blockstream = new axios.Axios({
   baseURL: `https://blockstream.info/testnet/api`,
 });
 
-// const blockstream = new axios.Axios({
-//   baseURL: `https://doge-electrs-demo.qed.me`,
-// });
-
 export async function waitUntilUTXO(address: string) {
   return new Promise<IUTXO[]>((resolve, reject) => {
     let intervalId: any;

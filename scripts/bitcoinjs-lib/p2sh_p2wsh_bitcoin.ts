@@ -1,29 +1,12 @@
 import * as btc from "bitcoinjs-lib";
 import { BitcoinNetwork, redeemScript } from "@oraichain/bitcoin-bridge-lib-js";
-import {
-  commitmentBytes,
-  encodeXpub,
-} from "@oraichain/bitcoin-bridge-wasm-sdk";
-import * as dogecoin from "@unielon/coin-dogecoin";
+import { commitmentBytes } from "@oraichain/bitcoin-bridge-wasm-sdk";
 import BIP32Factory from "bip32";
 import * as ecc from "tiny-secp256k1";
-import { witnessStackToScriptWitness } from "./witness_stack_to_script_witness";
 import { broadcast } from "./blockstream_utils";
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync } from "fs";
 import path from "path";
-
-function isRedeemScriptValidSize(script: string): boolean {
-  const scriptBuffer = Buffer.from(script, "hex");
-  return scriptBuffer.length <= 520;
-}
-
-export function bech32toScriptPubKey(a: string): Buffer {
-  const z = btc.address.fromBech32(a);
-  return btc.script.compile([
-    btc.script.number.encode(z.version),
-    btc.address.fromBech32(a).data,
-  ]);
-}
+import { bech32toScriptPubKey } from "./utils";
 
 const main = async () => {
   let network = btc.networks.testnet;

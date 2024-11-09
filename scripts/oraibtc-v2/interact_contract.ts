@@ -65,11 +65,12 @@ async function main(): Promise<void> {
     "orai12sxqkgsystjgd9faa48ghv3zmkfqc6qu05uy20mvv730vlzkpvls5zqxuz"
   );
 
-  console.log(
-    await cwAppBitcoinClient.processedOutpoint({
-      key: "bc70cee8d686fc8ea1fedea8411102ece44c27aade8d1cbc2551c2d4974b40a3:4",
-    })
-  );
+  console.log(await cwAppBitcoinClient.config());
+  // console.log(
+  //   await cwAppBitcoinClient.processedOutpoint({
+  //     key: "bc70cee8d686fc8ea1fedea8411102ece44c27aade8d1cbc2551c2d4974b40a3:4",
+  //   })
+  // );
 
   // console.log("Building index:", await cwAppBitcoinClient.buildingIndex());
 

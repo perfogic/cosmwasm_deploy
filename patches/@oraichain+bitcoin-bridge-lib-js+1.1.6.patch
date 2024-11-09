@@ -1,0 +1,132 @@
+diff --git a/node_modules/@oraichain/bitcoin-bridge-lib-js/build/index.d.ts b/node_modules/@oraichain/bitcoin-bridge-lib-js/build/index.d.ts
+index 1e06e47..a22853a 100644
+--- a/node_modules/@oraichain/bitcoin-bridge-lib-js/build/index.d.ts
++++ b/node_modules/@oraichain/bitcoin-bridge-lib-js/build/index.d.ts
+@@ -22,4 +22,4 @@ export interface DepositFailureCapacity {
+ export type DepositResult = DepositSuccess | DepositFailureOther | DepositFailureCapacity;
+ export declare function generateDepositAddress(opts: DepositOptions): Promise<DepositResult>;
+ export declare function broadcast(relayer: string, depositAddr: string, sigsetIndex: number, dest: Dest): Promise<Response>;
+-export declare function redeemScript(sigset: SignatorySet, dest: Buffer, threshold: [number, number]): Buffer;
++export declare function redeemScript(sigset: SignatorySet, dest: Buffer, threshold: [number, number], type: "legacy" | "witness_v0" = "witness_v0",  mode?: "info" | "debug" = "info"): Buffer;
+diff --git a/node_modules/@oraichain/bitcoin-bridge-lib-js/build/index.js b/node_modules/@oraichain/bitcoin-bridge-lib-js/build/index.js
+index 694a4f5..4e7a159 100644
+--- a/node_modules/@oraichain/bitcoin-bridge-lib-js/build/index.js
++++ b/node_modules/@oraichain/bitcoin-bridge-lib-js/build/index.js
+@@ -89,36 +89,116 @@ async function broadcast(relayer, depositAddr, sigsetIndex, dest) {
+ async function getCheckpoint(relayer) {
+     return await fetch(`${relayer}/api/checkpoint`).then((res) => res.text());
+ }
+-function redeemScript(sigset, dest, threshold) {
++function redeemScript(sigset, dest, threshold, type = "witness_v0", mode = "info") {
+     let truncation = BigInt(getTruncation(sigset, 23));
+     let [numerator, denominator] = threshold;
+     let firstSig = sigset.signatories[0];
+     let truncatedVp = BigInt(firstSig.voting_power) >> truncation;
+     let script = [];
++    let allCommands = [];
++
++    // Addition
++    if (type === "legacy") {
++        script.push(op("OP_DUP"));
++        allCommands.push("OP_DUP");
++        script.push(op("OP_0"));
++        allCommands.push("OP_0");
++        script.push(op("OP_EQUAL"));
++        allCommands.push("OP_EQUAL");
++        script.push(op("OP_NOT"));
++        allCommands.push("OP_NOT");
++        script.push(op("OP_IF"));
++        allCommands.push("OP_IF");
++    }
++    // --end--
++
+     script.push(Buffer.from(firstSig.pubkey.bytes));
++    allCommands.push(Buffer.from(firstSig.pubkey.bytes).toString("hex"));
+     script.push(op("OP_CHECKSIG"));
++    allCommands.push("OP_CHECKSIG");
+     script.push(op("OP_IF"));
++    allCommands.push("OP_IF");
+     script.push(pushInt(truncatedVp));
++    allCommands.push(truncatedVp.toString());
+     script.push(op("OP_ELSE"));
++    allCommands.push("OP_ELSE");
+     script.push(op("OP_0"));
++    allCommands.push("OP_0");
+     script.push(op("OP_ENDIF"));
++    allCommands.push("OP_ENDIF");
++
++    // Addition
++    if (type === "legacy") {
++        script.push(op("OP_ELSE"));
++        allCommands.push("OP_ELSE");
++        script.push(op("OP_DROP"));
++        allCommands.push("OP_DROP");
++        script.push(op("OP_0"));
++        allCommands.push("OP_0");
++        script.push(op("OP_ENDIF"));
++        allCommands.push("OP_ENDIF");
++    }
++    // --end--
++
+     for (let i = 1; i < sigset.signatories.length; i++) {
+         let sig = sigset.signatories[i];
+         let truncatedVp = BigInt(sig.voting_power) >> truncation;
+         script.push(op("OP_SWAP"));
++        allCommands.push("OP_SWAP");
++        // Addition
++        if (type === "legacy") {
++            script.push(op("OP_DUP"));
++            allCommands.push("OP_DUP");
++            script.push(op("OP_0"));
++            allCommands.push("OP_0");
++            script.push(op("OP_EQUAL"));
++            allCommands.push("OP_EQUAL");
++            script.push(op("OP_NOT"));
++            allCommands.push("OP_NOT");
++            script.push(op("OP_IF"));
++            allCommands.push("OP_IF");
++        }
++        // --end--
++        
+         script.push(Buffer.from(sig.pubkey.bytes));
++        allCommands.push(Buffer.from(sig.pubkey.bytes).toString("hex"));
+         script.push(op("OP_CHECKSIG"));
++        allCommands.push("OP_CHECKSIG");
+         script.push(op("OP_IF"));
++        allCommands.push("OP_IF");
+         script.push(pushInt(truncatedVp));
++        allCommands.push(truncatedVp.toString());
+         script.push(op("OP_ADD"));
++        allCommands.push("OP_ADD");
+         script.push(op("OP_ENDIF"));
++        allCommands.push("OP_ENDIF");
++
++        // Addition
++        if (type === "legacy") {
++            script.push(op("OP_ELSE"));
++            allCommands.push("OP_ELSE");
++            script.push(op("OP_DROP"));
++            allCommands.push("OP_DROP");
++            script.push(op("OP_ENDIF"));
++            allCommands.push("OP_ENDIF");
++        }
++        // --end--
+     }
+     let truncatedThreshold = ((presentVp(sigset) * BigInt(numerator)) / BigInt(denominator)) >>
+         truncation;
++
+     script.push(pushInt(truncatedThreshold));
++    allCommands.push(truncatedThreshold.toString());
+     script.push(op("OP_GREATERTHAN"));
++    allCommands.push("OP_GREATERTHAN");
+     script.push(dest);
++    allCommands.push(dest.toString("hex"));
+     script.push(op("OP_DROP"));
++    allCommands.push("OP_DROP");
++
++    if (mode === "debug") {
++        console.log(allCommands.join(" "));
++    }
+     return btc.script.compile(script);
+ }
+ function toNetwork(network) {

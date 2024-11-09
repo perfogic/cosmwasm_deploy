@@ -10,30 +10,7 @@ import * as ecc from "tiny-secp256k1";
 import { broadcast } from "./dogestream_utils";
 import { readFileSync } from "fs";
 import path from "path";
-
-function isRedeemScriptValidSize(script: string): boolean {
-  const scriptBuffer = Buffer.from(script, "hex");
-  return scriptBuffer.length <= 520;
-}
-
-export function bech32toScriptPubKey(a: string): Buffer {
-  const z = btc.address.fromBech32(a);
-  return btc.script.compile([
-    btc.script.number.encode(z.version),
-    btc.address.fromBech32(a).data,
-  ]);
-}
-
-export function legacyToScriptPubKey(address: string): Buffer {
-  const { hash } = btc.address.fromBase58Check(address); // Giải mã địa chỉ legacy (P2PKH)
-  return btc.script.compile([
-    btc.opcodes.OP_DUP,
-    btc.opcodes.OP_HASH160,
-    hash,
-    btc.opcodes.OP_EQUALVERIFY,
-    btc.opcodes.OP_CHECKSIG,
-  ]);
-}
+import { legacyToScriptPubKey } from "./utils";
 
 const main = async () => {
   let network = dogecoin.dogeCoin;
