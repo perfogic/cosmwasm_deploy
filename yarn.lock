@@ -2623,6 +2623,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@oraichain/common-contracts-sdk@npm:^1.0.31":
+  version: 1.0.31
+  resolution: "@oraichain/common-contracts-sdk@npm:1.0.31"
+  checksum: 10c0/c62883aa1a596f4ef5eef870c7382e0d9517640414253a0288ef25eb4f5a5dc3bd27f4a1bfa12e108f40ae62f9e0ea967e13e46650cd977382a896f8affac17c
+  languageName: node
+  linkType: hard
+
 "@oraichain/cosmosjs@npm:0.1.10":
   version: 0.1.10
   resolution: "@oraichain/cosmosjs@npm:0.1.10"
@@ -2717,6 +2724,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@oraichain/oraidex-common@npm:^1.1.3":
+  version: 1.1.28
+  resolution: "@oraichain/oraidex-common@npm:1.1.28"
+  dependencies:
+    "@cosmjs/amino": "npm:0.31.3"
+    "@cosmjs/cosmwasm-stargate": "npm:0.31.3"
+    "@cosmjs/crypto": "npm:0.31.3"
+    "@cosmjs/proto-signing": "npm:0.31.3"
+    "@cosmjs/stargate": "npm:0.31.3"
+    "@cosmjs/tendermint-rpc": "npm:0.31.3"
+    "@ethersproject/providers": "npm:^5.0.10"
+    "@injectivelabs/sdk-ts": "npm:1.12.1"
+    "@keplr-wallet/types": "npm:^0.11.38"
+    "@oraichain/oraidex-contracts-sdk": "npm:latest"
+    axios: "npm:1.7.2"
+    axios-extensions: "npm:3.1.7"
+    bignumber.js: "npm:^9.1.2"
+    cosmjs-types: "npm:0.8.0"
+    ethers: "npm:^5.0.15"
+    tronweb: "npm:6.0.0-beta.4"
+  checksum: 10c0/842c1004f48111cd539b79de99ab1b003cd3a2f56521e02048d514db09ac2f81ae6042768806a5e358783fc55c74d0dc229a4c8c4939cd1f4b33b0811df2a195
+  languageName: node
+  linkType: hard
+
 "@oraichain/oraidex-contracts-sdk@npm:latest":
   version: 1.0.53
   resolution: "@oraichain/oraidex-contracts-sdk@npm:1.0.53"
@@ -2724,10 +2755,47 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@oraichain/ton-bridge-contracts@npm:^0.15.8, @oraichain/ton-bridge-contracts@npm:^0.15.9":
+  version: 0.15.9
+  resolution: "@oraichain/ton-bridge-contracts@npm:0.15.9"
+  dependencies:
+    "@cosmjs/tendermint-rpc": "npm:^0.32.4"
+    "@orbs-network/ton-access": "npm:^2.3.3"
+    "@types/varstruct": "npm:^6.1.3"
+    cosmjs-types: "npm:^0.9.0"
+    dotenv: "npm:^16.4.5"
+    varstruct: "npm:^6.1.3"
+  checksum: 10c0/acb83b7651a3fcf9469c7090fd388f46ddfcd78d83187f526b3e7226e372aaf1153ce8b5888a34d75847d62b2da9cecb9aec5f35b7ee1fa6b2f969e045b1bf6b
+  languageName: node
+  linkType: hard
+
 "@oraichain/ton-multiowner@npm:^0.0.1":
   version: 0.0.1
   resolution: "@oraichain/ton-multiowner@npm:0.0.1"
   checksum: 10c0/350c73b7e1f3aed302cd1da9992004372abdf978cf4e30bc3a3c1bb00732c6e38687a7e26b3464587b5c43cead4b532190ad31e7f689f36207e25598b4a8849b
+  languageName: node
+  linkType: hard
+
+"@oraichain/tonbridge-contracts-sdk@npm:^1.3.6":
+  version: 1.3.6
+  resolution: "@oraichain/tonbridge-contracts-sdk@npm:1.3.6"
+  checksum: 10c0/340f1f167b9f7835b6a29e73531abc45b4fe9884d786a1071480d310a26465a286b2a2f38ab8c063cab0503338134e97b13c62e8e08934605e0ba923a3e7774a
+  languageName: node
+  linkType: hard
+
+"@oraichain/tonbridge-sdk@npm:^1.3.6":
+  version: 1.3.6
+  resolution: "@oraichain/tonbridge-sdk@npm:1.3.6"
+  dependencies:
+    "@oraichain/common-contracts-sdk": "npm:^1.0.31"
+    "@oraichain/oraidex-common": "npm:^1.1.3"
+    "@oraichain/ton-bridge-contracts": "npm:^0.15.8"
+    "@oraichain/tonbridge-contracts-sdk": "npm:^1.3.6"
+    "@orbs-network/ton-access": "npm:^2.3.3"
+    "@ton/core": "npm:^0.56.3"
+    "@ton/ton": "npm:^14.0.0"
+    "@tonconnect/ui-react": "npm:^2.0.9"
+  checksum: 10c0/03cc278ba13f1b913e48d953215e8a08919b9c81fb963e009792027a8fcba560c47418bfe5ca2e1e72d6057cc38ce56c83a68318dc530da42896da419c28c8f0
   languageName: node
   linkType: hard
 
@@ -3176,6 +3244,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ton/core@npm:^0.56.3":
+  version: 0.56.3
+  resolution: "@ton/core@npm:0.56.3"
+  dependencies:
+    symbol.inspect: "npm:1.0.1"
+  peerDependencies:
+    "@ton/crypto": ">=3.2.0"
+  checksum: 10c0/a419fc154fb09cbc89f0577809ad01814a33fbaacba138fca276ca119ebb7ec2a72b330aea10859f0534f7f8f30ddf9099c3c82d2cfdfebaf9ea574f824e510c
+  languageName: node
+  linkType: hard
+
 "@ton/core@npm:~0":
   version: 0.59.0
   resolution: "@ton/core@npm:0.59.0"
@@ -3251,12 +3330,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ton/ton@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "@ton/ton@npm:14.0.0"
+  dependencies:
+    axios: "npm:^1.6.7"
+    dataloader: "npm:^2.0.0"
+    symbol.inspect: "npm:1.0.1"
+    teslabot: "npm:^1.3.0"
+    zod: "npm:^3.21.4"
+  peerDependencies:
+    "@ton/core": ">=0.56.0"
+    "@ton/crypto": ">=3.2.0"
+  checksum: 10c0/39655dd2be20d25970214c83ca09ec0d59b0068969aaa183e4989addeac3f3cfc49c74f4f76cd9c89fd8f927dce99f7cc4f8698a87fa38b4382e1b75700490b5
+  languageName: node
+  linkType: hard
+
 "@tonconnect/isomorphic-eventsource@npm:^0.0.1":
   version: 0.0.1
   resolution: "@tonconnect/isomorphic-eventsource@npm:0.0.1"
   dependencies:
     eventsource: "npm:^2.0.2"
   checksum: 10c0/2c766a876090eb38e1a374d8cb70110819db27013bea7750e0407b03708374c00f207715493e6cf36b999368e5a476934f4fc65630d61646083010ce69c31e45
+  languageName: node
+  linkType: hard
+
+"@tonconnect/isomorphic-eventsource@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "@tonconnect/isomorphic-eventsource@npm:0.0.2"
+  dependencies:
+    eventsource: "npm:^2.0.2"
+  checksum: 10c0/dbce08a4c1a5869b32452e7d37d0a2a5556fc6911f4c097aaa4ac8c6946c101ccba2ce4633803e512a9a0d0a19a71ae350585e49349887a8598c66ff04d0b6b9
   languageName: node
   linkType: hard
 
@@ -3269,13 +3373,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tonconnect/protocol@npm:^2.2.5":
+"@tonconnect/isomorphic-fetch@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@tonconnect/isomorphic-fetch@npm:0.0.3"
+  dependencies:
+    node-fetch: "npm:^2.6.9"
+  checksum: 10c0/7c1d8f972636548af48691b52012604734f73e9780322e85e769bebfcbd72aa63e04efda6f49569f575bddfbae50606eb2413eee81727cb359065ddddf389e3e
+  languageName: node
+  linkType: hard
+
+"@tonconnect/protocol@npm:^2.2.5, @tonconnect/protocol@npm:^2.2.6":
   version: 2.2.6
   resolution: "@tonconnect/protocol@npm:2.2.6"
   dependencies:
     tweetnacl: "npm:^1.0.3"
     tweetnacl-util: "npm:^0.15.1"
   checksum: 10c0/6d4acd20acf8c92dfcdff4f9909a589faf8e7a47e381347b3165aee2454216029682591e7f1ab7bbaa1f566bfaeb462c4f5facd574fb685c81f9c6147cceadfc
+  languageName: node
+  linkType: hard
+
+"@tonconnect/sdk@npm:3.0.5":
+  version: 3.0.5
+  resolution: "@tonconnect/sdk@npm:3.0.5"
+  dependencies:
+    "@tonconnect/isomorphic-eventsource": "npm:^0.0.2"
+    "@tonconnect/isomorphic-fetch": "npm:^0.0.3"
+    "@tonconnect/protocol": "npm:^2.2.6"
+  checksum: 10c0/f80ad56119950b3b40dd2c2f222e5a6c8854c5abe1c3137d50a5c792f4a40ecfd20f5ef7cd33851a5ff3d6296b2afb1883763c03a190282efdd537785400f60f
   languageName: node
   linkType: hard
 
@@ -3287,6 +3411,30 @@ __metadata:
     "@tonconnect/isomorphic-fetch": "npm:^0.0.2"
     "@tonconnect/protocol": "npm:^2.2.5"
   checksum: 10c0/287aa4271e7a3c3e706f1e4d87d71f96739c2cdc716636411589d718d5aa15fb59c7a206a6d77c911a6455fe6e84bec76d812557c9585381aea78c07d9617f14
+  languageName: node
+  linkType: hard
+
+"@tonconnect/ui-react@npm:^2.0.9":
+  version: 2.0.9
+  resolution: "@tonconnect/ui-react@npm:2.0.9"
+  dependencies:
+    "@tonconnect/ui": "npm:2.0.9"
+  peerDependencies:
+    react: ">=17.0.0"
+    react-dom: ">=17.0.0"
+  checksum: 10c0/c907968620214ea551bf0ed994d28e7bf1a0502a3fd142cc80cfd49d657e43a868f9684099fb7e925260165e0b3ca694b09f0f48358888476fc99fc4cb3c23aa
+  languageName: node
+  linkType: hard
+
+"@tonconnect/ui@npm:2.0.9":
+  version: 2.0.9
+  resolution: "@tonconnect/ui@npm:2.0.9"
+  dependencies:
+    "@tonconnect/sdk": "npm:3.0.5"
+    classnames: "npm:^2.3.2"
+    deepmerge: "npm:^4.2.2"
+    ua-parser-js: "npm:^1.0.35"
+  checksum: 10c0/9390f45c72fdb3c63c3e69aeafffc59f4a415b8aa6e9e41b880cdfbfce964c2d2f8accd97b40170003475fb811a0e7f8e70c214acebe62fbccf4a948de594cc0
   languageName: node
   linkType: hard
 
@@ -4973,6 +5121,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.3.2":
+  version: 2.5.1
+  resolution: "classnames@npm:2.5.1"
+  checksum: 10c0/afff4f77e62cea2d79c39962980bf316bacb0d7c49e13a21adaadb9221e1c6b9d3cdb829d8bb1b23c406f4e740507f37e1dcf506f7e3b7113d17c5bab787aa69
+  languageName: node
+  linkType: hard
+
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
@@ -5444,7 +5599,9 @@ __metadata:
     "@oraichain/dao-contracts-build": "npm:^1.0.5"
     "@oraichain/oraibtc-wasm": "npm:^1.0.11"
     "@oraichain/oraidex-common": "npm:^1.1.23"
+    "@oraichain/ton-bridge-contracts": "npm:^0.15.9"
     "@oraichain/ton-multiowner": "npm:^0.0.1"
+    "@oraichain/tonbridge-sdk": "npm:^1.3.6"
     "@orbs-network/ton-access": "npm:^2.3.3"
     "@swc/core": "npm:^1.5.3"
     "@swc/jest": "npm:^0.2.36"
@@ -5488,6 +5645,7 @@ __metadata:
     protobufjs: "npm:^7.2.5"
     rpc-bitcoin: "npm:^2.0.0"
     tiny-secp256k1: "npm:^2.2.3"
+    tonapi-sdk-js: "npm:^2.0.3"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.4.3"
     varstruct: "npm:^6.1.3"
@@ -5560,7 +5718,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.1.4":
+"dotenv@npm:^16.1.4, dotenv@npm:^16.4.5":
   version: 16.4.5
   resolution: "dotenv@npm:16.4.5"
   checksum: 10c0/48d92870076832af0418b13acd6e5a5a3e83bb00df690d9812e94b24aff62b88ade955ac99a05501305b8dc8f1b0ee7638b18493deb6fe93d680e5220936292f
@@ -11256,6 +11414,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tonapi-sdk-js@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "tonapi-sdk-js@npm:2.0.3"
+  checksum: 10c0/5bb7364c1a1cb3c67d94865fab6e30823ed78dbb0d32ec204c9363c7594f11608c25afd0736d1e288341b18c60b9f704b1b1322b091d74618fa1440da6d10f48
+  languageName: node
+  linkType: hard
+
 "tough-cookie@npm:^2.3.3, tough-cookie@npm:~2.5.0":
   version: 2.5.0
   resolution: "tough-cookie@npm:2.5.0"
@@ -11558,6 +11723,15 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/ac8307bb06bbfd08ae7137da740769b7d8c3ee5943188743bb622c621f8ad61d244767480f90fbd840277fbf152d8932aa20c33f867dea1bb5e79b187ca1a92f
+  languageName: node
+  linkType: hard
+
+"ua-parser-js@npm:^1.0.35":
+  version: 1.0.39
+  resolution: "ua-parser-js@npm:1.0.39"
+  bin:
+    ua-parser-js: script/cli.js
+  checksum: 10c0/c6452b0c683000f10975cb0a7e74cb1119ea95d4522ae85f396fa53b0b17884358a24ffdd86a66030c6b2981bdc502109a618c79fdaa217ee9032c9e46fcc78a
   languageName: node
   linkType: hard
 
