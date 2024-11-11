@@ -57,6 +57,7 @@ const main = async () => {
     Address.parse('EQC-aFP0rJXwTgKZQJPbPfTSpBFc8wxOgKHWD9cPvOl_DnaY')
   );
   let bridgeAdapterAdapter = blockchain.openContract(bridgeAdapterContract);
+  let beforeExecuteTime = new Date().getTime();
   const txResult = await bridgeAdapterAdapter.sendBridgeTon(
     sender,
     {
@@ -70,12 +71,14 @@ const main = async () => {
       queryId: 0,
     }
   );
+  let afterExecuteTime = new Date().getTime();
   prettyLogTransactions(txResult.transactions);
   // The simulate does not do a minus on the balance of sender => so we manually minus it.
   console.log(
     'After execute balance',
     (await blockchain.getContract(sender.address!)).balance - toNano(15)
   );
+  console.log('Execution time:', (afterExecuteTime - beforeExecuteTime) / 1000);
 };
 
 main();
