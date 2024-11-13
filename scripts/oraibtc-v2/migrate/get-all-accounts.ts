@@ -10,9 +10,9 @@ const getAllAccounts = async () => {
   let OBTC20_CONTRACT = 'orai10g6frpysmdgw5tdqke47als6f97aqmr8s3cljsvjce4n5enjftcqtamzsd';
   let cw20Contract = new Cw20Client(client, address, OBTC20_CONTRACT);
   console.log('token info:', await cw20Contract.tokenInfo());
-  let startAfter = undefined;
+  let startAfter: string | undefined = undefined;
   let limit = 100;
-  let allAccounts = [];
+  let allAccounts: any[] = [];
   while (true) {
     let { accounts } = await cw20Contract.allAccounts({ startAfter, limit });
     if (accounts.length === 0) {
@@ -25,7 +25,7 @@ const getAllAccounts = async () => {
     allAccounts.map((account) => cw20Contract.balance({ address: account }))
   );
 
-  let snapshotAccounts = [];
+  let snapshotAccounts: any[] = [];
   let total = 0n;
   for (let i = 0; i < allAccounts.length; i++) {
     if (BigInt(allBalances[i].balance) > 0n && BigInt(allBalances[i].balance) < 28000000n) {
