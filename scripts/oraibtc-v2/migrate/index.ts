@@ -6,7 +6,7 @@ const E14 = 10n ** 14n;
 const E8 = 10n ** 8n;
 const E6 = 10n ** 6n;
 const start = async () => {
-  let snapshotHeight = 30869462;
+  let snapshotHeight = 38869462;
   const cosmwasm = await CosmWasmClient.connect(RPC);
   cosmwasm.setQueryClientWithHeight(snapshotHeight);
   let OBTC20_CONTRACT = 'orai10g6frpysmdgw5tdqke47als6f97aqmr8s3cljsvjce4n5enjftcqtamzsd';
