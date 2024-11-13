@@ -1,17 +1,15 @@
-import { decodeTxRaw } from "@cosmjs/proto-signing";
-import * as injProto from "@injectivelabs/core-proto-ts";
-import { GasFee } from "@injectivelabs/sdk-ts";
-import { MsgType } from "@injectivelabs/ts-types";
-import crypto from "crypto";
+import { decodeTxRaw } from '@cosmjs/proto-signing';
+import * as injProto from '@injectivelabs/core-proto-ts';
+import { GasFee } from '@injectivelabs/sdk-ts';
+import { MsgType } from '@injectivelabs/ts-types';
+import crypto from 'crypto';
 
-const typeMap = Object.fromEntries(
-  Object.entries(MsgType).map(([k, v]) => ["/" + v, k])
-);
+const typeMap = Object.fromEntries(Object.entries(MsgType).map(([k, v]) => ['/' + v, k]));
 
 type TxType = keyof typeof MsgType;
 
 const findType: any = (obj: any, type: string) => {
-  if (typeof obj !== "object") return;
+  if (typeof obj !== 'object') return;
   const msg = obj[type];
   if (msg && msg.decode) return msg;
   for (const subObj of Object.values(obj)) {
@@ -43,16 +41,13 @@ export type FrontRunInfo = {
 class FrontRunClient {
   public readonly rpc: string;
   constructor(rpc: string) {
-    this.rpc = rpc.replace(/\/+$/, "");
+    this.rpc = rpc.replace(/\/+$/, '');
   }
 
-  async queryPendingTxs(
-    types: TxType[] = [],
-    limit = 30
-  ): Promise<FrontRunInfo[]> {
-    const { result } = await fetch(
-      `${this.rpc}/unconfirmed_txs?limit=${limit}`
-    ).then((res) => res.json());
+  async queryPendingTxs(types: TxType[] = [], limit = 30): Promise<FrontRunInfo[]> {
+    const { result } = await fetch(`${this.rpc}/unconfirmed_txs?limit=${limit}`).then((res) =>
+      res.json()
+    );
     return result.txs.map((txRaw: string) => {
       // const tx = decodeTxRaw(Buffer.from(txRaw, "base64"));
       // const { amount, gasLimit, ...rest } = tx.authInfo.fee as any;
@@ -71,18 +66,14 @@ class FrontRunClient {
       //     .map(decodeProto),
       // };
 
-      return crypto.createHash("sha256").update(txRaw).digest("hex");
+      return crypto.createHash('sha256').update(txRaw).digest('hex');
     });
   }
 }
 
 (async () => {
-  const frontRunClient = new FrontRunClient(
-    "https://osmosis-rpc.stake-town.com/"
-  );
-  const frontRunClient2 = new FrontRunClient(
-    "https://rpc-osmosis.ecostake.com/"
-  );
+  const frontRunClient = new FrontRunClient('https://osmosis-rpc.stake-town.com/');
+  const frontRunClient2 = new FrontRunClient('https://rpc-osmosis.ecostake.com/');
   const pendingTxs = await Promise.all([
     frontRunClient.queryPendingTxs(),
     frontRunClient2.queryPendingTxs(),

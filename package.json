@@ -26,7 +26,7 @@
     "@oraichain/cw-simulate": "^2.8.100",
     "@oraichain/dao-contracts-build": "^1.0.5",
     "@oraichain/oraibtc-wasm": "^1.0.11",
-    "@oraichain/oraidex-common": "^1.1.23",
+    "@oraichain/oraidex-common": "^1.1.31",
     "@oraichain/ton-bridge-contracts": "^0.15.9",
     "@oraichain/ton-multiowner": "^0.0.1",
     "@oraichain/tonbridge-sdk": "^1.3.6",
