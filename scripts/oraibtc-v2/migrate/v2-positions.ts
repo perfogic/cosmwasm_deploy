@@ -2,9 +2,9 @@ import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { AssetInfo } from '@oraichain/common-contracts-sdk/build/CwIcs20Latest.types';
 import { BigDecimal, REWARDER_CONTRACT, STAKING_CONTRACT } from '@oraichain/oraidex-common';
 
-const RPC = 'http://3.14.142.99:26657';
+const RPC = 'https://oraichain-mainnet-rpc.autostake.com:443/';
 const start = async () => {
-  let snapshotHeight = 38869462; // 38869462
+  let snapshotHeight = 39144723; // 38869462
   const cosmwasm = await CosmWasmClient.connect(RPC);
   cosmwasm.setQueryClientWithHeight(snapshotHeight);
   const LIQUIDITY_ADDRESS = 'orai1jd9lc2qt0ltjsatgnu38xsz8ngp89clp0dpeh8geyjj70yvkn4kqmrmh3m';
