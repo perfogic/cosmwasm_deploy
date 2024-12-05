@@ -8,3 +8,4 @@ export * from "./ProxyBitcoin.client";
 export * from "./AppBitcoin.client";
 export * from "./LightClientBitcoin.client";
 export * from "./RefundBtc.client";
+export * from "./SimpleBridge.client"
