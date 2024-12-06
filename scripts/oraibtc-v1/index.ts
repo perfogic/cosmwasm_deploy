@@ -3,8 +3,13 @@ import { sha256 } from 'bitcoinjs-lib/src/crypto';
 import { fromBech32, toBech32 } from '@cosmjs/encoding';
 import { Buffer } from 'buffer';
 
+interface Signatory {
+  voting_power: number;
+  pubkey: number[];
+}
+
 interface SigSet {
-  signatories: Array<{ voting_power: number; pubkey: number[] }>;
+  signatories: Array<Signatory>;
   index: number;
   bridgeFeeRate: number;
   minerFeeRate: number; // sats per deposit
@@ -325,4 +330,4 @@ function consensusReq(
   });
 }
 
-export { redeemScript, SigSet, IbcDest, makeIbcDest, encode, toNetwork };
+export { redeemScript, SigSet, IbcDest, makeIbcDest, encode, toNetwork, Signatory };

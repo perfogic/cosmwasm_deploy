@@ -4626,7 +4626,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bip39@npm:^3.0.3, bip39@npm:^3.0.4":
+"bip39@npm:^3.0.3, bip39@npm:^3.0.4, bip39@npm:^3.1.0":
   version: 3.1.0
   resolution: "bip39@npm:3.1.0"
   dependencies:
@@ -5665,6 +5665,7 @@ __metadata:
     "@unielon/coin-dogecoin": "npm:^1.0.27"
     axios: "npm:^0.26.1"
     bip32: "npm:^4.0.0"
+    bip39: "npm:^3.1.0"
     bitcoinjs-lib: "npm:^6.1.6"
     bitcore-lib-doge: "npm:^10.5.3"
     cosmjs-types: "npm:^0.9.0"
